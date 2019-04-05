@@ -50,7 +50,13 @@ case $1 in
 		bash run_server.sh
 		;;
 
-	"attach-server" ) bash run_client.sh;;
+	"attach-server" ) 
+		
+		#preps
+		bash install_packages.sh
+
+		#attach
+		bash run_client.sh;;
 
 	"status" ) lsof -i :7070;;
 
