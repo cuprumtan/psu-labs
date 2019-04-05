@@ -26,7 +26,7 @@ case "$manager" in
 	"pacman" )  sudo pacman -S --noconfirm tmux lsof python3 nmap;;
 	"emerge" )  sudo emerge tmux lsof python3 nmap;;
 	"zypper" )  sudo zypper install tmux lsof python3 nmap;;
-	"apt_get" ) sudo apt-get -y install tmux lsof python3 nmap;;
+	"apt-get" ) sudo apt-get -y install tmux lsof python3 nmap;;
 esac
 
 echo ""
