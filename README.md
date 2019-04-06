@@ -19,3 +19,7 @@
 # Пример вызова:
 
 bash LANstash.sh run-server
+
+# TODO
+
+chat
