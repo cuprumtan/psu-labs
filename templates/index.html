@@ -79,14 +79,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
     <script>
       let socket = io.connect( 'http://' + document.domain + ':' + location.port )
-      // broadcast a message
+      // broadcast scrapy message
       socket.on( 'connect', function() {
         socket.emit( 'my event', {
           data: 'User Connected'
         } )
         let form = $( 'form' ).on( 'submit', function( e ) {
           e.preventDefault()
-          let user_name = $( 'input.username' ).val()
+          let user_name = $( 'input.username' ).val() + ": "
           let user_input = $( 'textarea.message' ).val()
           socket.emit( 'my event', {
             user_name : user_name,
