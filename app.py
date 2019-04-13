@@ -7,7 +7,6 @@ app.config['SECRET_KEY'] = 'dder98342cuprumtan'
 socketio = SocketIO(app)
 
 @app.route('/')
-<<<<<<< HEAD
 def index():
     return render_template('./index.html')
 
@@ -21,18 +20,3 @@ def handle_my_custom_event(json):
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
-=======
-def hello():
-  return render_template('./index.html')
-
-def message_recived():
-  print('message was received')
-
-@socketio.on('my event')
-def handle_my_custom_event(json):
-  print('recived my event: ' + str(json))
-  socketio.emit('my response', json, callback=message_recived)
-
-if __name__ == '__main__':
-  socketio.run(app, debug=True)
->>>>>>> Рефакторинг
