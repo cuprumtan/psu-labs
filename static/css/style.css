@@ -30,7 +30,7 @@ h1:before {
   height: 50px;
   width: 50px;
   transition-duration: 500ms;
-  border: 0 solid #4B384C;
+  border: 0 solid #B52153;
   opacity: 0.7;
 }
 h1:before {
@@ -39,12 +39,16 @@ h1:before {
   border-right-color: #632C65;
   border-top-color: #632C65;
   right: -35px;
-  top: -25px;
+  top: -30px;
 }
 h1:after {
   border-bottom-width: 10px;
   border-left-width: 10px;
-  bottom: -5px;
+  -moz-border-image: -moz-linear-gradient(right, #B52153 60%, #632C65 100%);
+  -webkit-border-image: -webkit-linear-gradient(right, #B52153 60%, #632C65 100%);
+  border-image: linear-gradient(to left, #B52153 60%, #632C65 100%);
+  border-image-slice: 1;
+  bottom: -10px;
   left: -35px;
 }
 
@@ -52,5 +56,5 @@ h1:hover:before,
 h1:hover:after {
   width: 100vw;
   height: 100px;
-  opacity: 0.9;
+  opacity: 1;
 }
