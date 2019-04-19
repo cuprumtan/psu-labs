@@ -7,6 +7,9 @@
 
     <link rel="icon" type="image/png" href="../templates/bathroom.png"/>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>scrapy chat</title>
     <link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
@@ -70,8 +73,32 @@
           <!-- <input type="text" class="message form-control" placeholder="Message"> -->
               <textarea class="message form-control" style="resize: vertical; min-height: 150px" id="Message" placeholder="Message"></textarea>
               <div style="padding-top: 5px;"></div>
-              <button style="background-color: #B52153; border: transparent" type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-flash"></span> Send</button>
-              <button style="background-color: #B52153; border: transparent" type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-flash"></span> Send</button>
+              <button style="background-color: #B52153; border: transparent; margin-bottom: 5px" type="submit" class="btn btn-success btn-block">
+                  <span class="glyphicon glyphicon-flash"></span> Send</button>
+             <!-- <div class="dropdown">
+              <button onclick="clicked(this, 'red')" style="background-color: #494559; border: transparent; margin-bottom: 5px" type="button" class="btn btn-success btn-block" data-toggle="dropdown">
+                  <span class="glyphicon glyphicon-search"></span> Scan file servers</button>
+              <ul class="dropdown-menu">
+                <li><a href="#">HTML</a></li>
+                <li><a href="https://soundcloud.com/discover" target="_blank">CSS</a></li>
+                <li><a href="#">JavaScript</a></li>
+              </ul>
+            </div> -->
+              <div class="dropdown">
+              <button style="background-color: #494559; border: transparent; margin-bottom: 5px" type="button" class="btn btn-success btn-block" data-toggle="dropdown">
+                  <span class="glyphicon glyphicon-search"></span> Scan file servers</button>
+              <ul class="dropdown-menu">
+                  <script>
+                    //var myArray = new Array("1", "2", "3", "4", "5");
+                    var server_names_array = JSON.parse('{{servers_array}}');
+                    for(i=0; i<server_names_array.length; i++) {
+                        // document.write('<li><a href="https://soundcloud.com/discover" target="_blank">' + server_names_array[i] + '</a></li>');
+                        document.write('<li><a href="http://' + server_names_array[i] + ':7071" target="_blank">' + server_names_array[i] + '</a></li>');
+                    }
+                </script>
+              </ul>
+            </div>
+
         </form>
       </div>
     </div>
@@ -89,7 +116,7 @@
               } )
           let form = $( 'form' ).on( 'submit', function( e ) {
               e.preventDefault()
-              let user_name = $( 'input.username' ).val() + ": "
+              let user_name = $( 'input.username' ).val() + ": test "
               let user_input = $( 'textarea.message' ).val()
               socket.emit( 'my event', {
                   user_name : user_name,
@@ -98,6 +125,7 @@
           // empty the input field
               $( 'input.message' ).val( '' ).focus()
               } )
+
           } )
       // capture message
       socket.on( 'my response', function( msg ) {
@@ -108,5 +136,6 @@
               }
               } )
   </script>
+
   </body>
 </html>
