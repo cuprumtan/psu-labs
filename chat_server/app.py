@@ -38,9 +38,17 @@ def bash_get_servers():
 @app.route('/')
 def index():
     #servers_array = ["192.168.0.5", "192.168.0.6"]
+    #servers_array = bash_get_servers()
+    #servers_array = json.dumps(servers_array)
+    return render_template('./index.html')
+
+
+@app.route('/servers_array', methods=['POST'])
+def update_servers_array():
+    #servers_array = ["123", "1888"]
     servers_array = bash_get_servers()
     servers_array = json.dumps(servers_array)
-    return render_template('./index.html', servers_array=Markup(servers_array))
+    return Markup(servers_array)
 
 def message_recived():
     print('message was received')

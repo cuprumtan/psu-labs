@@ -85,17 +85,9 @@
               </ul>
             </div> -->
               <div class="dropdown">
-              <button style="background-color: #494559; border: transparent; margin-bottom: 5px" type="button" class="btn btn-success btn-block" data-toggle="dropdown">
+              <button onclick="getServersArray()" style="background-color: #494559; border: transparent; margin-bottom: 5px" type="button" class="btn btn-success btn-block" data-toggle="dropdown">
                   <span class="glyphicon glyphicon-search"></span> Scan file servers</button>
-              <ul class="dropdown-menu">
-                  <script>
-                    //var myArray = new Array("1", "2", "3", "4", "5");
-                    var server_names_array = JSON.parse('{{servers_array}}');
-                    for(i=0; i<server_names_array.length; i++) {
-                        // document.write('<li><a href="https://soundcloud.com/discover" target="_blank">' + server_names_array[i] + '</a></li>');
-                        document.write('<li><a href="http://' + server_names_array[i] + ':7071" target="_blank">' + server_names_array[i] + '</a></li>');
-                    }
-                </script>
+              <ul id="servers_list" class="dropdown-menu">
               </ul>
             </div>
 
@@ -136,6 +128,35 @@
               }
               } )
   </script>
+
+  <script>
+                    //var myArray = new Array("1", "2", "3", "4", "5");
+                    /*var server_names_array = JSON.parse('{{servers_array}}');
+                    for(i=0; i<server_names_array.length; i++) {
+                        // document.write('<li><a href="https://soundcloud.com/discover" target="_blank">' + server_names_array[i] + '</a></li>');
+                        document.write('<li><a href="http://' + server_names_array[i] + ':7071" target="_blank">' + server_names_array[i] + '</a></li>');
+                    }*/
+
+                    function getServersArray() {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/servers_array',
+                            data: $('form').serialize(),
+                            success: function (response) {
+                                var server_names_array = JSON.parse(response);
+                                var tag_string = '';
+                                for (i = 0; i < server_names_array.length; i++) {
+                                    // document.write('<li><a href="https://soundcloud.com/discover" target="_blank">' + server_names_array[i] + '</a></li>');
+                                    tag_string += '<li><a href="http://' + server_names_array[i] + ':7071" target="_blank">' + server_names_array[i] + '</a></li>';
+                                }
+                                document.getElementById('servers_list').innerHTML = tag_string;
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                </script>
 
   </body>
 </html>
