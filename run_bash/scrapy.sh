@@ -30,7 +30,7 @@ case $1 in
 		echo ""
 		echo "Scanning network..."
 		echo ""
-		bash browse.sh
+		bash browse.sh localhost
 		#xdg-open http://localhost:7070
 		;;
 
