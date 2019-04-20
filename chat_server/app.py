@@ -8,9 +8,25 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dder98342cuprumtan'
 socketio = SocketIO(app)
 
+
 def bash_get_servers():
+
     result_array = []
-    proc = subprocess.Popen(["nmap -p 7071 192.168.0.* -oG - | grep 7071/open | awk '{print $2}'"], stdout=subprocess.PIPE, shell=True)
+    ref_ip = subprocess.Popen(["ip route get 1.2.3.4 | awk '{print $7}'"], stdout=subprocess.PIPE, shell=True)
+    (stdout, err) = ref_ip.communicate()
+    reader = stdout.decode('ascii').splitlines()
+    full_ip = reader[0]
+    #print(full_ip)
+
+    ref_ip = subprocess.Popen(["echo " + full_ip + "| awk 'BEGIN{FS=OFS=\".\"} NF--'"], stdout=subprocess.PIPE,
+                              shell=True)
+    (stdout, err) = ref_ip.communicate()
+    reader = stdout.decode('ascii').splitlines()
+    full_ip_mask = reader[0] + ".*"
+    #print(full_ip_mask)
+
+    proc = subprocess.Popen(["nmap -p7071 " + full_ip_mask + " -oG - | grep 7071/open | awk '{print $2}'"],
+                            stdout=subprocess.PIPE, shell=True)
     (stdout, err) = proc.communicate()
     reader = stdout.decode('utf-8').splitlines()
 

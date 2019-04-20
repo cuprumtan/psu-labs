@@ -116,7 +116,7 @@
               } )
           let form = $( 'form' ).on( 'submit', function( e ) {
               e.preventDefault()
-              let user_name = $( 'input.username' ).val() + ": test "
+              let user_name = $( 'input.username' ).val() + ": "
               let user_input = $( 'textarea.message' ).val()
               socket.emit( 'my event', {
                   user_name : user_name,
