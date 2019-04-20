@@ -1,1 +1,1 @@
-xdg-open http://localhost:7070 
+xdg-open http://$1:7070 

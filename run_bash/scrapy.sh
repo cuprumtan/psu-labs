@@ -34,6 +34,15 @@ case $1 in
 		#xdg-open http://localhost:7070
 		;;
 
+	"attach" ) 
+		
+		#preps
+		bash install_packages.sh
+
+		#run chat
+		bash run_chat.sh
+		;;	
+
 	"status" ) 
 
  		# chat
