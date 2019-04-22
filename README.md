@@ -23,3 +23,6 @@ bash LANstash.sh run-server
 # TODO
 
 chat
+
+# STATUS:
+CANCELLED 
