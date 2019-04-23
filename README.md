@@ -26,6 +26,9 @@ $ bash scrapy.sh kill-chat
 - посмотреть статус
 $ bash scrapy.sh status
 
+- посмотреть справку
+$ bash scrapy.sh help
+
 # Примечания:
 
 Предложенное ТЗ:
