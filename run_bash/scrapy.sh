@@ -2,6 +2,8 @@
 
 case $1 in
 
+	"help" ) xdg-open $(pwd)/README.html;;
+
 	"kill-server" ) bash kill_server.sh;;
 
  	"kill-chat" ) bash kill_chat.sh;;
