@@ -1,10 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/style.css">
     <title>Title</title>
 </head>
 <body>
+<div class="wrapper">
+
+    <div class="container main-header">
+        <b>Введите данные о себе</b>
+    </div>
+
+    <form action="validate-user-info" method="post">
+        <div class="container user-info">
+            <div class="row">
+                <div class="info-label"><label>ФИО:</label></div>
+                <div class="info-input"><input type="text" name="fio"></div>
+            </div>
+            <div class="row">
+                <div class="info-label"><label>Группа:</label></div>
+                <div class="info-input"><input type="text" name="group"></div>
+            </div>
+            <div class="row">
+                <div class="info-label"><label>Курс:</label></div>
+                <div class="info-input"><input type="number" name="course"></div>
+            </div>
+            <div class="row">
+                <div class="info-label"><label>Количество вопросов:</label></div>
+                <div class="info-input"><input type="number" name="count"></div>
+            </div>
+            Выберите темы:
+            <br>
+
+            <label>
+                <input type="checkbox" name="subject" value="question_number">
+                Трехфазные цепи
+            </label><br>
+            <label>
+                <input type="checkbox" name="subject" value="question_number">
+                Фильтры. Генераторы. Амплитудно – частотная характеристика. Фаза - частотная характеристика.
+            </label><br>
+            <label>
+                <input type="checkbox" name="subject" value="question_number">
+                Элементы электрической цепи
+            </label><br>
+            <label>
+                <input type="checkbox" name="subject" value="question_number">
+                Цепи при гармоническом воздействии
+            </label><br>
+        </div>
+
+        <div class="container">
+            <button class="btn-submit">Перейти к выбору тем и вопросов</button>
+        </div>
+
+    </form>
+</div>
 
 </body>
 </html>
