@@ -25,7 +25,7 @@ def root():
     return redirect(url_for('test_begin'))
 
 
-@app.route('/begin', methods=['GET', 'POST'])
+@app.route('/info', methods=['GET', 'POST'])
 def test_begin():
     subjects_dict = {}
     subjects_data = session.query(CeSubjects.id, CeSubjects.subject_name).all()
