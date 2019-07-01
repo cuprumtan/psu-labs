@@ -13,14 +13,6 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-# def get_subjects():
-#     list = {"1":u"Трехфазные цепи",
-#             "2":u"Фильтры. Генераторы. Амплитудно – частотная характеристика. Фаза - частотная характеристика.",
-#             "3":u"Элементы электрической цепи",
-#             "4":u"Цепи при гармоническом воздействии"}
-#     return list
-
-
 @app.route('/')
 def root():
     # test_data = session.query(CeSubjects.subject_name).all()
@@ -35,7 +27,6 @@ def root():
 
 @app.route('/begin', methods=['GET', 'POST'])
 def test_begin():
-    # list = get_subjects()
     subjects_dict = {}
     subjects_data = session.query(CeSubjects.id, CeSubjects.subject_name).all()
     session.commit()
