@@ -3,7 +3,8 @@ from flask import Flask, render_template, redirect, url_for, request, session
 # from flask.ext.session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from Model import CeSubjects
+from sqlalchemy.sql.expression import func
+from Model import CeSubjects, CeQuestions, CeAnswers
 import re
 
 SECRET_KEY = 'idi_v_svoi_dvor'
@@ -39,7 +40,7 @@ def validate_user_info(fio, group, course, count, subjects):
                          "group": "valid",
                          "course": "valid",
                          "count": "valid",
-                         "subjects":"valid"}
+                         "subjects": "valid"}
     has_errors = False
     if not re.match(re.compile(unicode(r'^[А-Яа-я ]+$', 'utf8')), fio):
         validation_result["fio"] = "invalid"
@@ -80,9 +81,19 @@ def testing():
         return test_begin()
     else:
         session['has_errors'] = False
-
-
-    return render_template('testing.html')
+    questions_dict = {}
+    questions_data = db_session.query(CeQuestions.id, CeQuestions.question_text).filter(
+        CeQuestions.subject_id.in_(subjects)).order_by(func.random()).limit(count).all()
+    db_session.commit()
+    for x in range(len(questions_data)):
+        questions_dict[questions_data[x].id] = questions_data[x].question_text
+    answers_dict = {}
+    answers_data = db_session.query(CeAnswers.id, CeAnswers.answer_text, CeAnswers.question_id).filter(
+        CeAnswers.question_id.in_(questions_dict.keys())).all()
+    db_session.commit()
+    for x in range(len(answers_data)):
+        answers_dict[answers_data[x].id] = [answers_data[x].answer_text, answers_data[x].question_id]
+    return render_template('testing.html', questions=questions_dict, answers=answers_dict)
 
 
 @app.route('/result', methods=['POST'])

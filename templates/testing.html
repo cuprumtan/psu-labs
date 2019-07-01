@@ -11,111 +11,25 @@
     <div class="container main-header">
         <b>Тестирование</b>
     </div>
+
     <form action="result" method="post">
+    <span>Всего найдено {{ questions | length }} вопросов.</span>
+    <br>
+    <br>
+    {% for key, value in questions.items() %}
         <div class="container question">
-            <span>Вопрос 1:</span>
-            <br>
-            Чем характеризуются резисторы?
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 1
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 2
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 3
-            </label>
-        </div>
-
-        <div class="container question">
-            <span>Вопрос 1:</span>
-            <br>
-            Чем характеризуются резисторы?
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 1
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 2
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 3
-            </label>
-        </div>
-
-        <div class="container question">
-            <span>Вопрос 1:</span>
-            <br>
-            Чем характеризуются резисторы?
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 1
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 2
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 3
-            </label>
-        </div>
-
-        <div class="container question">
-            <span>Вопрос 1:</span>
-            <br>
-            Чем характеризуются резисторы?
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 1
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 2
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 3
-            </label>
-        </div>
-
-        <div class="container question">
-            <span>Вопрос 1:</span>
-            <br>
-            Чем характеризуются резисторы?
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 1
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 2
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 3
-            </label>
-        </div>
+            <span>Вопрос {{ loop.index }}.</span><br>
+            {{ value }}<br>
+                {% for key_ans, value_ans in answers.items() %}
+                        {% if value_ans[1] == key %}
+                            <label>
+                                <input type="checkbox" name="answers" value="question_number">
+                                {{ value_ans[0] }}<br>
+                            </label>
+                        {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
 
         <div class="container">
             <button class="btn-submit">Завершить тестирование</button>
