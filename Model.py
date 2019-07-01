@@ -28,7 +28,7 @@ class CeAnswers(Base):
 
 
 class CeSessions(Base):
-    __tablename__ = 'ceanswers'
+    __tablename__ = 'cesessions'
     id = Column(Integer, nullable=False, primary_key=True)
     session_number = Column(Integer, nullable=False)
     session_date = Column(Text, nullable=False)
