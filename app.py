@@ -66,6 +66,12 @@ def testing():
     course = request.form['course']
     count = request.form['count']
     subjects = request.form.getlist('subject')
+
+    session['fio'] = fio
+    session['group'] = group
+    session['course'] = course
+    session['count'] = count
+
     validation_result, has_errors = validate_user_info(fio, group, course, count, subjects)
 
     if has_errors:
@@ -75,10 +81,7 @@ def testing():
     else:
         session['has_errors'] = False
 
-    session['fio'] = fio
-    session['group'] = group
-    session['course'] = course
-    session['count'] = count
+
     return render_template('testing.html')
 
 
