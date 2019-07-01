@@ -27,4 +27,13 @@ class CeAnswers(Base):
     is_right = Column(Boolean, nullable=False)
 
 
-
+class CeSessions(Base):
+    __tablename__ = 'ceanswers'
+    id = Column(Integer, nullable=False, primary_key=True)
+    session_number = Column(Integer, nullable=False)
+    session_date = Column(Text, nullable=False)
+    student_name = Column(String, nullable=False)
+    student_group = Column(String, nullable=True)
+    student_grade = Column(Integer, nullable=True)
+    answer_id = Column(Integer, ForeignKey('ceanswers.id'), nullable=False)
+    is_right = Column(Boolean, nullable=False)
