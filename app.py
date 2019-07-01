@@ -17,7 +17,6 @@ Session = sessionmaker(bind=engine)
 db_session = Session()
 
 
-
 @app.route('/')
 def root():
     return redirect(url_for('test_begin'))
@@ -36,10 +35,10 @@ def test_begin():
 
 
 def validate_user_info(fio, group, course, count):
-    validation_result = {"fio":"valid",
-                         "group":"valid",
-                         "course":"valid",
-                         "count":"valid"}
+    validation_result = {"fio": "valid",
+                         "group": "valid",
+                         "course": "valid",
+                         "count": "valid"}
     has_errors = False
     if not re.match(re.compile(unicode(r'^[А-Яа-я ]+$', 'utf8')), fio):
         validation_result["fio"] = "invalid"
