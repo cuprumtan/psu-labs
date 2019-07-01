@@ -48,7 +48,11 @@
             </div>
             Выберите темы:
             <br>
-
+            <div>
+                {% if session.get('has_errors')==True and session.get('val_res')['subjects']=='invalid' %}
+                    <div class="input-error">* Необходимо выбрать хотя бы 1 тему!</div>
+                {% endif %}
+            </div>
             {% for key, value in subjects.items() %}
             <label>
                 <input type="checkbox" name="subject" value="{{ key }}">

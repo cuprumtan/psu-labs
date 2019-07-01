@@ -34,11 +34,12 @@ def test_begin():
     return render_template('start.html', subjects=subjects_dict)
 
 
-def validate_user_info(fio, group, course, count):
+def validate_user_info(fio, group, course, count, subjects):
     validation_result = {"fio": "valid",
                          "group": "valid",
                          "course": "valid",
-                         "count": "valid"}
+                         "count": "valid",
+                         "subjects":"valid"}
     has_errors = False
     if not re.match(re.compile(unicode(r'^[А-Яа-я ]+$', 'utf8')), fio):
         validation_result["fio"] = "invalid"
@@ -52,6 +53,9 @@ def validate_user_info(fio, group, course, count):
     if not re.match(r'^[1-9]+[0-9]*$', count):
         validation_result["count"] = "invalid"
         has_errors = True
+    if len(subjects) == 0:
+        validation_result["subjects"] = "invalid"
+        has_errors = True
     return validation_result, has_errors
 
 
@@ -61,7 +65,8 @@ def testing():
     group = request.form['group']
     course = request.form['course']
     count = request.form['count']
-    validation_result, has_errors = validate_user_info(fio, group, course, count)
+    subjects = request.form.getlist('subject')
+    validation_result, has_errors = validate_user_info(fio, group, course, count, subjects)
 
     if has_errors:
         session['has_errors'] = True
