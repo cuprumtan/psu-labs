@@ -16,19 +16,35 @@
         <div class="container user-info">
             <div class="row">
                 <div class="info-label"><label>ФИО:</label></div>
-                <div class="info-input"><input type="text" name="fio"></div>
+                <div class="info-input"><input type="text" name="fio" pattern="[А-Яа-я]{1,}">
+                {% if session.get('has_errors')==True and session.get('val_res')['fio']=='invalid' %}
+                    <div class="input-error">* ФИО должно содержать только русские буквы</div>
+                {% endif %}
+                </div>
             </div>
             <div class="row">
                 <div class="info-label"><label>Группа:</label></div>
-                <div class="info-input"><input type="text" name="group"></div>
+                <div class="info-input"><input type="text" name="group" pattern="[А-Яа-я0-9-]{1,}">
+                {% if session.get('has_errors')==True and session.get('val_res')['group']=='invalid' %}
+                    <div class="input-error">* Название группы должно содержать только цифры и буквы</div>
+                {% endif %}
+                </div>
             </div>
             <div class="row">
                 <div class="info-label"><label>Курс:</label></div>
-                <div class="info-input"><input type="number" name="course"></div>
+                <div class="info-input"><input type="number" name="course" pattern="[1-6]">
+                {% if session.get('has_errors')==True and session.get('val_res')['course']=='invalid' %}
+                    <div class="input-error">* Курс может принимать значения от 1 до 6</div>
+                {% endif %}
+                </div>
             </div>
             <div class="row">
                 <div class="info-label"><label>Количество вопросов:</label></div>
-                <div class="info-input"><input type="number" name="count"></div>
+                <div class="info-input"><input type="number" name="count"  pattern="[1-9]{1}[0-9]{0,}">
+                {% if session.get('has_errors')==True and session.get('val_res')['count']=='invalid' %}
+                    <div class="input-error">* Количество может быть задано только числом</div>
+                {% endif %}
+                </div>
             </div>
             Выберите темы:
             <br>
