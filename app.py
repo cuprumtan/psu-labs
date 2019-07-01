@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, redirect, url_for, request
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from Model import CeSubjects
+
 
 app = Flask(__name__)
+
+engine = create_engine('sqlite:///circuit-engineering.db', encoding='utf-8')
+connection = engine.connect()
+Session = sessionmaker(bind=engine)
+session = Session()
 
 
 def get_subjects():
@@ -14,6 +23,9 @@ def get_subjects():
 
 @app.route('/')
 def root():
+    test_data = session.query(CeSubjects.subject_name).all()
+    session.commit()
+    return "{}".format(str(test_data[0]).encode('utf-8'))
     return redirect(url_for('test_begin'))
 
 
