@@ -25,7 +25,11 @@ def get_subjects():
 def root():
     test_data = session.query(CeSubjects.subject_name).all()
     session.commit()
-    return test_data[0].subject_name
+    test_arr = []
+    for x in range(len(test_data)):
+        test_arr.append(test_data[x].subject_name)
+    return test_arr[5]
+    return repr(test_arr).decode("unicode-escape")
     return redirect(url_for('test_begin'))
 
 
