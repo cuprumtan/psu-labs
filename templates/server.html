@@ -12,7 +12,41 @@
 		<b>Панель управления</b>
 	</div>
 
-<form action="validate-user-info" method="post">
+<form action="manage" method="post">
+    <div class="container results">
+        <b>IP-адрес сервера:</b> 192.168.1.34:1778<br>
+        <b>Фильтр:</b><br>
+        <div class="row">
+            <span>
+                Дата с <input type="text" name="date-from"> по <input type="text" name="date-to">
+            </span>
+        </div>
+        <div class="row">
+            <span>
+                Курс <input type="number" name="course">
+            </span>
+        </div>
+        <div class="row">
+            <span>
+                Группа <input type="text" name="group">
+            </span>
+        </div>
+        <b>Результаты тестирования:</b>
+        <div class="result-card">
+            ФИО:<br>
+            Группа:<br>
+            Курс:<br>
+            Количество вопросов:<br>
+            Дата и время тестирования:<br>
+        </div>
+        <div class="result-card">
+            ФИО:<br>
+            Группа:<br>
+            Курс:<br>
+            Количество вопросов:<br>
+            Дата и время тестирования:<br>
+        </div>
+    </div>
 
 <div>
 
