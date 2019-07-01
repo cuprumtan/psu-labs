@@ -88,3 +88,15 @@ body {
 .btn-submit:hover {
 	cursor: pointer;
 }
+
+.center-div
+{
+  position: absolute;
+  margin: 0 auto;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+}
