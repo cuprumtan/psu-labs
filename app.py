@@ -99,7 +99,7 @@ def testing():
 
 @app.route('/result', methods=['POST'])
 def test_result():
-    repr(session)
+    session.clear()
     return render_template('result.html', data=session.get('fio'))
 
 
