@@ -13,30 +13,35 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-def get_subjects():
-    list = {"1":u"Трехфазные цепи",
-            "2":u"Фильтры. Генераторы. Амплитудно – частотная характеристика. Фаза - частотная характеристика.",
-            "3":u"Элементы электрической цепи",
-            "4":u"Цепи при гармоническом воздействии"}
-    return list
+# def get_subjects():
+#     list = {"1":u"Трехфазные цепи",
+#             "2":u"Фильтры. Генераторы. Амплитудно – частотная характеристика. Фаза - частотная характеристика.",
+#             "3":u"Элементы электрической цепи",
+#             "4":u"Цепи при гармоническом воздействии"}
+#     return list
 
 
 @app.route('/')
 def root():
-    test_data = session.query(CeSubjects.subject_name).all()
-    session.commit()
-    test_arr = []
-    for x in range(len(test_data)):
-        test_arr.append(test_data[x].subject_name)
-    return test_arr[5]
-    return repr(test_arr).decode("unicode-escape")
+    # test_data = session.query(CeSubjects.subject_name).all()
+    # session.commit()
+    # test_arr = []
+    # for x in range(len(test_data)):
+    #     test_arr.append(test_data[x].subject_name)
+    # return test_arr[5]
+    # return repr(test_arr).decode("unicode-escape")
     return redirect(url_for('test_begin'))
 
 
 @app.route('/begin', methods=['GET', 'POST'])
 def test_begin():
-    list = get_subjects()
-    return render_template('start.html', subjects=list)
+    # list = get_subjects()
+    subjects_dict = {}
+    subjects_data = session.query(CeSubjects.id, CeSubjects.subject_name).all()
+    session.commit()
+    for x in range(len(subjects_data)):
+        subjects_dict[subjects_data[x].id] = subjects_data[x].subject_name
+    return render_template('start.html', subjects=subjects_dict)
 
 
 @app.route('/testing', methods=['POST'])
