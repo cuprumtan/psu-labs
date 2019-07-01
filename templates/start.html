@@ -33,22 +33,14 @@
             Выберите темы:
             <br>
 
+            {% for key, value in subjects.items() %}
             <label>
-                <input type="checkbox" name="subject" value="question_number">
-                Трехфазные цепи
+                <input type="checkbox" name="subject" value="{{ key }}">
+                {{ value }}
             </label><br>
-            <label>
-                <input type="checkbox" name="subject" value="question_number">
-                Фильтры. Генераторы. Амплитудно – частотная характеристика. Фаза - частотная характеристика.
-            </label><br>
-            <label>
-                <input type="checkbox" name="subject" value="question_number">
-                Элементы электрической цепи
-            </label><br>
-            <label>
-                <input type="checkbox" name="subject" value="question_number">
-                Цепи при гармоническом воздействии
-            </label><br>
+            {% endfor %}
+
+
         </div>
 
         <div class="container">
