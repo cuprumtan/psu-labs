@@ -25,6 +25,8 @@ def root():
 
 @app.route('/info', methods=['GET', 'POST'])
 def test_begin():
+    if request.method == 'GET':
+        session.clear()
     subjects_dict = {}
     subjects_data = db_session.query(CeSubjects.id, CeSubjects.subject_name).all()
     db_session.commit()
@@ -39,16 +41,16 @@ def validate_user_info(fio, group, course, count):
                          "course":"valid",
                          "count":"valid"}
     has_errors = False
-    if not re.match(r'^[А-Яа-я ]+$',fio):
+    if not re.match(re.compile(unicode(r'^[А-Яа-я ]+$', 'utf8')), fio):
         validation_result["fio"] = "invalid"
         has_errors = True
-    if not re.match(r'^[А-Яа-я0-9]+$', group):
+    if not re.match(re.compile(unicode('^[А-Яа-я0-9_-]+$', 'utf8')), group):
         validation_result["group"] = "invalid"
         has_errors = True
     if not re.match(r'^[1-6]$', course):
         validation_result["course"] = "invalid"
         has_errors = True
-    if not re.match(r'^[1-9]+[0-9]+$', count):
+    if not re.match(r'^[1-9]+[0-9]*$', count):
         validation_result["count"] = "invalid"
         has_errors = True
     return validation_result, has_errors

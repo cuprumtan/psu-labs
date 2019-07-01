@@ -16,7 +16,7 @@
         <div class="container user-info">
             <div class="row">
                 <div class="info-label"><label>ФИО:</label></div>
-                <div class="info-input"><input type="text" name="fio" pattern="[А-Яа-я]{1,}">
+                <div class="info-input"><input type="text" name="fio" pattern="[А-Яа-я ]{1,}">
                 {% if session.get('has_errors')==True and session.get('val_res')['fio']=='invalid' %}
                     <div class="input-error">* ФИО должно содержать только русские буквы</div>
                 {% endif %}
