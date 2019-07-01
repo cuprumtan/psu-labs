@@ -30,11 +30,12 @@ def test_begin():
 
 @app.route('/testing', methods=['POST'])
 def testing():
+    arr_data = []
     if request.method == 'POST':
-        print(str(request.form['fio']))
-        print(str(request.form['group']))
-        print(str(request.form['course']))
-        print(str(request.form['count']))
+        arr_data.append(request.form['fio'])
+        arr_data.append(request.form['group'])
+        arr_data.append(request.form['course'])
+        arr_data.append(request.form['count'])
     return render_template('testing.html')
 
 
@@ -46,6 +47,11 @@ def test_result():
 @app.route('/manage', methods=['GET', 'POST'])
 def manage_server():
     return render_template('server.html')
+
+
+@app.route('/advanced_result')
+def advanced_result():
+    return render_template('advanced_results.html')
 
 
 @app.errorhandler(405)
