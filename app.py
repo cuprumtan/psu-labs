@@ -72,6 +72,7 @@ def testing():
     session['group'] = group
     session['course'] = course
     session['count'] = count
+    session['subjects'] = subjects
 
     validation_result, has_errors = validate_user_info(fio, group, course, count, subjects)
 
