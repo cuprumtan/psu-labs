@@ -158,13 +158,10 @@ def test_result():
                     # тут сохраняем
             if right_count == right_answered:
                 score = score + 1
-        right_answers_percent = round(score/len(questions_data))*100
-        if right_answers_percent < 0:
-            right_answers_percent = 0
-        if score < 0:
-            score = 0
+        questions_count = len(questions_data)
+        right_answers_percent = round(score/questions_count)*100
         session.clear()
-    return render_template('result.html', user_answers=score, rigth_answers=len(questions_data), percent=right_answers_percent)
+    return render_template('result.html', user_answers=score, rigth_answers=questions_count, percent=right_answers_percent)
 
 
 @app.route('/manage', methods=['GET', 'POST'])
