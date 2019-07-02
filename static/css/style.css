@@ -73,6 +73,11 @@ body {
 	border: 1px #ddd;
 }
 
+.filter-text-left {
+	float: left;
+	width: 60px;
+}
+
 .btn-submit {
 	background-color: #4ecdc4;
 	color: #fff;
@@ -83,6 +88,11 @@ body {
 	display: block;
 	font-size: 15px;
 	box-shadow: 0px 2px 2px #aab2bd;
+}
+
+.btn-small {
+	padding: 6px 10px;
+	font-size: 14px;
 }
 
 .input-error {

@@ -28,10 +28,12 @@ def test_begin():
     if request.method == 'GET':
         session.clear()
     subjects_dict = {}
-    subjects_data = db_session.query(CeSubjects.id, CeSubjects.subject_name).all()
+    subjects_data = db_session.query(CeSubjects.id, CeSubjects.subject_name).order_by(func.random()).all()
     db_session.commit()
+    id = 0
     for x in range(len(subjects_data)):
-        subjects_dict[subjects_data[x].id] = subjects_data[x].subject_name
+        subjects_dict[id] = subjects_data[x]
+        id = id+1
     return render_template('start.html', subjects=subjects_dict)
 
 
@@ -105,6 +107,16 @@ def test_result():
 
 @app.route('/manage', methods=['GET', 'POST'])
 def manage_server():
+    if request.method == 'POST':
+        date_from = request.form['date_from']
+        date_to = request.form['date_to']
+        course = request.form['course']
+        group = request.form['group']
+
+        session['date_from'] = date_from
+        session['date_to'] = date_to
+        session['course'] = course
+        session['group'] = group
     return render_template('server.html')
 
 

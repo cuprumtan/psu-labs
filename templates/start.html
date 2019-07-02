@@ -16,7 +16,7 @@
         <div class="container user-info">
             <div class="row">
                 <div class="info-label"><label>ФИО:</label></div>
-                <div class="info-input"><input type="text" name="fio" pattern="[А-Яа-я ]{1,}" value="{{ session.get('fio') if session.get('fio') != None}}">
+                <div class="info-input"><input type="text" name="fio" pattern="[А-Яа-я ]{1,}" value="{{ session.get('fio') if session.get('fio') != None }}">
                 {% if session.get('has_errors')==True and session.get('val_res')['fio']=='invalid' %}
                     <div class="input-error">* ФИО должно содержать только русские буквы</div>
                 {% endif %}
@@ -24,7 +24,7 @@
             </div>
             <div class="row">
                 <div class="info-label"><label>Группа:</label></div>
-                <div class="info-input"><input type="text" name="group" pattern="[А-Яа-я0-9-]{1,}" value="{{ session.get('group') if session.get('group') != None}}">
+                <div class="info-input"><input type="text" name="group" pattern="[А-Яа-я0-9-]{1,}" value="{{ session.get('group') if session.get('group') != None }}">
                 {% if session.get('has_errors')==True and session.get('val_res')['group']=='invalid' %}
                     <div class="input-error">* Название группы должно содержать только цифры и буквы</div>
                 {% endif %}
@@ -32,7 +32,7 @@
             </div>
             <div class="row">
                 <div class="info-label"><label>Курс:</label></div>
-                <div class="info-input"><input type="number" name="course" pattern="[1-6]" value="{{ session.get('course') if session.get('course') != None}}">
+                <div class="info-input"><input type="number" name="course" pattern="[1-6]" value="{{ session.get('course') if session.get('course') != None }}">
                 {% if session.get('has_errors')==True and session.get('val_res')['course']=='invalid' %}
                     <div class="input-error">* Курс может принимать значения от 1 до 6</div>
                 {% endif %}
@@ -40,7 +40,7 @@
             </div>
             <div class="row">
                 <div class="info-label"><label>Количество вопросов:</label></div>
-                <div class="info-input"><input type="number" name="count"  pattern="[1-9]{1}[0-9]{0,}" value="{{ session.get('count') if session.get('count') != None}}">
+                <div class="info-input"><input type="number" name="count"  pattern="[1-9]{1}[0-9]{0,}" value="{{ session.get('count') if session.get('count') != None }}">
                 {% if session.get('has_errors')==True and session.get('val_res')['count']=='invalid' %}
                     <div class="input-error">* Количество может быть задано только числом</div>
                 {% endif %}
@@ -53,10 +53,10 @@
                     <div class="input-error">* Необходимо выбрать хотя бы 1 тему!</div>
                 {% endif %}
             </div>
-            {% for key, value in subjects.items() %}
+            {% for id, object in subjects.items() %}
             <label>
-                <input type="checkbox" name="subject" value="{{ key }}" {{ 'checked' if (session.get('subjects') != None and key|string in session.get('subjects')) }}>
-                {{ value }}
+                <input id="{{ id }}" type="checkbox" name="subject" value="{{ object.id }}" {{ 'checked' if (session.get('subjects') != None and object.id|string in session.get('subjects')) }}>
+                {{ object.subject_name }}
             </label><br>
             {% endfor %}
 
