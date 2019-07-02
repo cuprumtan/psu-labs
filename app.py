@@ -99,6 +99,9 @@ def testing():
         CeAnswers.question_id.in_([tuple(questions_dict[x])[0] for x in range(len(questions_dict))]))\
         .order_by(func.random()).all()
     db_session.commit()
+    right_answers_count = db_session.query(CeAnswers.id, CeAnswers.answer_text, CeAnswers.question_id).filter(
+        CeAnswers.question_id.in_([tuple(questions_dict[x])[0] for x in range(len(questions_dict))])).count()
+    db_session.commit()
     id = 0
     for x in range(len(answers_data)):
         answers_dict[id] = answers_data[x]
