@@ -13,7 +13,7 @@
     </div>
     <form action="info" method="post">
         <div class="container result-card">
-            Вы ответили на {0} из {1} вопросов правильно ({2}% верно)
+            Вы ответили на {{ user_answers }} из {{ rigth_answers }} вопросов правильно ({{ percent }}% верно)
         </div>
         <div class="container">
             <button class="btn-submit">Начать новый тест</button>

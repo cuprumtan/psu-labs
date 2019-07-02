@@ -40,8 +40,8 @@
             </div>
             <div class="row">
                 <div class="info-label"><label>Количество вопросов:</label></div>
-                <div class="info-input"><input type="number" name="count"  pattern="[1-9]{1}[0-9]{0,}" value="{{ session.get('count') if session.get('count') != None }}">
-                {% if session.get('has_errors')==True and session.get('val_res')['count']=='invalid' %}
+                <div class="info-input"><input type="number" name="limit"  pattern="[1-9]{1}[0-9]{0,}" value="{{ session.get('limit') if session.get('limit') != None }}">
+                {% if session.get('has_errors')==True and session.get('val_res')['limit']=='invalid' %}
                     <div class="input-error">* Количество может быть задано только числом</div>
                 {% endif %}
                 </div>

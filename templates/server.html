@@ -14,7 +14,11 @@
 
 <form action="manage" method="post">
     <div class="container results">
-        <div class="row"><b>IP-адрес сервера:</b> {{ ipaddr }}</div>
+        <div class="row"><b>IP-адрес сервера:</b></div>
+            {% for ip in ip_list %}
+                {{ ip }}<br>
+            {% endfor %}
+        <br>
         <div class="row"><b>Фильтр:</b></div>
         <div class="row">
             <span>
