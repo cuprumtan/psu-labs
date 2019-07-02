@@ -4,7 +4,7 @@ from flask import Flask, render_template, redirect, url_for, request, session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.expression import func
-from Model import CeSubjects, CeQuestions, CeAnswers
+from Model import CeSubjects, CeQuestions, CeAnswers, CeSessions
 import re
 import subprocess
 
@@ -22,6 +22,8 @@ db_session = Session()
 
 @app.route('/')
 def root():
+    session_number = db_session.query(func.coalesce(func.max(CeSessions.session_number), 0)).all()
+    session['number'] = tuple(session_number[0])[0]
     return redirect(url_for('test_begin'))
 
 
