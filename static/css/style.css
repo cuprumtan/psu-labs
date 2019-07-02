@@ -78,6 +78,15 @@ body {
 	width: 60px;
 }
 
+.btns {
+	height: 30px;
+}
+
+.left-btn {
+	margin-left: 10px;
+	float: left;
+}
+
 .btn-submit {
 	background-color: #4ecdc4;
 	color: #fff;

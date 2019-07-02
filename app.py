@@ -118,10 +118,13 @@ def manage_server():
         course = request.form['course']
         group = request.form['group']
 
-        session['date_from'] = date_from
-        session['date_to'] = date_to
-        session['course'] = course
-        session['group'] = group
+        if request.form['btn_action'] != 'clear':
+            session['date_from'] = date_from
+            session['date_to'] = date_to
+            session['course'] = course
+            session['group'] = group
+        else:
+            session.clear()
     return render_template('server.html')
 
 
