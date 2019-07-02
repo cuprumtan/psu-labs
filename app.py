@@ -156,8 +156,10 @@ def test_result():
                             score = score - 1
                     # тут сохраняем
         right_answers_percent = round(score/right_answers_count)
-        if (right_answers_percent < 0):
+        if right_answers_percent < 0:
             right_answers_percent = 0
+        if score < 0:
+            score = 0
         session.clear()
     return render_template('result.html', user_answers=score, rigth_answers=right_answers_count, percent=right_answers_percent)
 
