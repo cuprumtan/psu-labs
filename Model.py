@@ -37,3 +37,4 @@ class CeSessions(Base):
     student_grade = Column(Integer, nullable=True)
     answer_id = Column(Integer, ForeignKey('ceanswers.id'), nullable=False)
     is_right = Column(Boolean, nullable=False)
+    result_percent = Column(Integer)

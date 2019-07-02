@@ -855,3 +855,5 @@ insert into ceanswers (question_id, answer_text, is_right) values
 (172, 'Линейная зависимость фазы от частоты', true),
 (172, 'Квадратичная зависимость фазы от частоты', false),
 (172, 'Линейная зависимость суммы фаз от амплитуды выходного сигнала', false);
+
+alter table cesessions add column result_percent integer;
