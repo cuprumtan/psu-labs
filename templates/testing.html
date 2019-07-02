@@ -23,7 +23,7 @@
                 {% for aid, aobject in answers.items() %}
                         {% if aobject.question_id == qobject.id %}
                             <label>
-                                <input type="checkbox" name="answers" value="question_number">
+                                <input id = {{ aobject.id }} type="checkbox" name="answers_q_{{ qobject.id }}">
                                 {{ aobject.answer_text }}<br>
                             </label>
                         {% endif %}
