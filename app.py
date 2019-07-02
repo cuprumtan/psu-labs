@@ -6,6 +6,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.expression import func
 from Model import CeSubjects, CeQuestions, CeAnswers
 import re
+import subprocess
+
 
 SECRET_KEY = 'idi_v_svoi_dvor'
 
@@ -112,6 +114,8 @@ def test_result():
 
 @app.route('/manage', methods=['GET', 'POST'])
 def manage_server():
+    p = subprocess.Popen("bash get_my_ip.sh", stdout=subprocess.PIPE, shell=True)
+    (output, err) = p.communicate()
     if request.method == 'POST':
         date_from = request.form['date_from']
         date_to = request.form['date_to']
@@ -125,7 +129,7 @@ def manage_server():
             session['group'] = group
         else:
             session.clear()
-    return render_template('server.html')
+    return render_template('server.html', ipaddr=output)
 
 
 @app.route('/advanced_result')
