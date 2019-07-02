@@ -13,11 +13,28 @@
     </div>
     <form>
         <div class="container user-info">
-            <span>ФИО: </span> <a>Вася Пупкин</a> <br>
-            <span>Группа: </span> <a>кмб-3</a> <br>
-            <span>Курс: </span> <a>3</a> <br>
-            <span>Дата: </span> <a>01-07-2019</a> <br>
+            <span>ФИО: </span>{{ fio }}<br>
+            <span>Группа: </span>{{ group }}<br>
+            <span>Курс: </span>{{ course }}<br>
+            <span>Дата: </span>{{ date }}<br>
         </div>
+
+        {% for qid, qobject in questions.items() %}
+        <div class="container question">
+            <span>Вопрос {{ loop.index }}.</span><br><br>
+            <b>{{ qobject.question_text }}</b><br><br>
+                {% for aid, aobject in answers.items() %}
+                        {% if aobject.question_id == qobject.id %}
+                            <label>
+                                <input id="{{ aobject.id }}" type="checkbox" name="{{ qobject.id }}" value="{{ aobject.id }}">
+                                {{ aobject.answer_text }}<br>
+                            </label>
+                        {% endif %}
+                {% endfor %}
+                <br>
+            </div>
+        {% endfor %}
+
         <div class="container question" style="background-color: #f5d5d5">
             <span>Вопрос 1:</span>
             <br>

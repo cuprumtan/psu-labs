@@ -139,30 +139,32 @@ def test_result():
         fio = session.get('fio')# фио студента
         group = session.get('group')# группа
         course = session.get('course')# курс
-        right_answers_count = session.get('right_answers_count')
+        # right_answers_count = session.get('right_answers_count')
         score = 0
         for q_object in questions_data:
             answered = request.form.getlist(str(q_object[0]))
+            right_count = 0
+            right_answered = 0
             for a_object in answers_data:
                 if q_object[0] == a_object[2]:
+                    if a_object[3] == True:
+                        right_count = right_count + 1
                     if str(a_object[0]) in answered:
                         checked = True
                         if a_object[3] == True:
-                            score = score + 1
-                        else:
-                            score = score - 1
+                            right_answered = right_answered + 1
                     else:
                         checked = False
-                        if a_object[3] == True:
-                            score = score - 1
                     # тут сохраняем
-        right_answers_percent = round(score/right_answers_count)*100
+            if right_count == right_answered:
+                score = score + 1
+        right_answers_percent = round(score/len(questions_data))*100
         if right_answers_percent < 0:
             right_answers_percent = 0
         if score < 0:
             score = 0
-        # session.clear()
-    return render_template('result.html', user_answers=score, rigth_answers=right_answers_count, percent=right_answers_percent)
+        session.clear()
+    return render_template('result.html', user_answers=score, rigth_answers=len(questions_data), percent=right_answers_percent)
 
 
 @app.route('/manage', methods=['GET', 'POST'])
