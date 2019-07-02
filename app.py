@@ -28,7 +28,7 @@ def test_begin():
     if request.method == 'GET':
         session.clear()
     subjects_dict = {}
-    subjects_data = db_session.query(CeSubjects.id, CeSubjects.subject_name).order_by(func.random()).all()
+    subjects_data = db_session.query(CeSubjects.id, CeSubjects.subject_name).all()
     db_session.commit()
     id = 0
     for x in range(len(subjects_data)):
@@ -88,14 +88,19 @@ def testing():
     questions_data = db_session.query(CeQuestions.id, CeQuestions.question_text).filter(
         CeQuestions.subject_id.in_(subjects)).order_by(func.random()).limit(count).all()
     db_session.commit()
+    id = 0
     for x in range(len(questions_data)):
-        questions_dict[questions_data[x].id] = questions_data[x].question_text
+        questions_dict[id] = questions_data[x]
+        id = id+1
     answers_dict = {}
     answers_data = db_session.query(CeAnswers.id, CeAnswers.answer_text, CeAnswers.question_id).filter(
-        CeAnswers.question_id.in_(questions_dict.keys())).all()
+        CeAnswers.question_id.in_([tuple(questions_dict[x])[0] for x in range(len(questions_dict))]))\
+        .order_by(func.random()).all()
     db_session.commit()
+    id = 0
     for x in range(len(answers_data)):
-        answers_dict[answers_data[x].id] = [answers_data[x].answer_text, answers_data[x].question_id]
+        answers_dict[id] = answers_data[x]
+        id = id + 1
     return render_template('testing.html', questions=questions_dict, answers=answers_dict)
 
 

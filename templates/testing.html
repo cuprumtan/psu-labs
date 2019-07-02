@@ -16,18 +16,19 @@
     <span>Всего найдено {{ questions | length }} вопросов.</span>
     <br>
     <br>
-    {% for key, value in questions.items() %}
+    {% for qid, qobject in questions.items() %}
         <div class="container question">
-            <span>Вопрос {{ loop.index }}.</span><br>
-            {{ value }}<br>
-                {% for key_ans, value_ans in answers.items() %}
-                        {% if value_ans[1] == key %}
+            <span>Вопрос {{ loop.index }}.</span><br><br>
+            <b>{{ qobject.question_text }}</b><br><br>
+                {% for aid, aobject in answers.items() %}
+                        {% if aobject.question_id == qobject.id %}
                             <label>
                                 <input type="checkbox" name="answers" value="question_number">
-                                {{ value_ans[0] }}<br>
+                                {{ aobject.answer_text }}<br>
                             </label>
                         {% endif %}
                 {% endfor %}
+                <br>
             </div>
         {% endfor %}
 
