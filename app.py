@@ -36,6 +36,7 @@ ip_v4 = get_ipv4()
 @app.route('/')
 def root():
     session_number = db_session.query(func.coalesce(func.max(CeSessions.session_number), 0)).all()
+    db_session.commit()
     session['number'] = tuple(session_number[0])[0]
     return redirect(url_for('test_begin'))
 
@@ -144,7 +145,7 @@ def test_result():
             answered = request.form.getlist(str(q_object[0]))
             for a_object in answers_data:
                 if q_object[0] == a_object[2]:
-                    if a_object[0] in answered:
+                    if str(a_object[0]) in answered:
                         checked = True
                         if a_object[3] == True:
                             score = score + 1
@@ -155,12 +156,12 @@ def test_result():
                         if a_object[3] == True:
                             score = score - 1
                     # тут сохраняем
-        right_answers_percent = round(score/right_answers_count)
+        right_answers_percent = round(score/right_answers_count)*100
         if right_answers_percent < 0:
             right_answers_percent = 0
         if score < 0:
             score = 0
-        session.clear()
+        # session.clear()
     return render_template('result.html', user_answers=score, rigth_answers=right_answers_count, percent=right_answers_percent)
 
 
