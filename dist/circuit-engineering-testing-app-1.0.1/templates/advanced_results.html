@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Подробные результаты тестирования</title>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="container main-header">
+        <b>Подробные результаты тестирования</b>
+    </div>
+    <form>
+        <div class="container user-info">
+            <span>ФИО: </span>{{ fio }}<br>
+            <span>Группа: </span>{{ group }}<br>
+            <span>Курс: </span>{{ course }}<br>
+            <span>Дата: </span>{{ date }}<br>
+            <span>Результат: </span>{{ percent }}%<br>
+        </div>
+        {% for q_object in data %}
+            <div class="container question">
+                <span>Вопрос {{ loop.index }}.</span><br><br>
+                <b>{{ q_object.question_text }}</b><br><br>
+                {% for a_object in q_object.answers %}
+                    {% if a_object.is_right == False %}
+                        <label class="wrong-answer">
+                    {% else %}
+                        <label>
+                    {% endif %}
+                <input id="{{ a_object.id }}" type="checkbox" name="{{ q_object.id }}"
+                       value="{{ a_object.answer_text }}" {% if a_object.checked == True %} checked {% endif %}>
+                {{ a_object.answer_text }}<br>
+                </label>
+                {% endfor %}
+                <br>
+            </div>
+        {% endfor %}
+    </form>
+</div>
+</body>
+
+</html>

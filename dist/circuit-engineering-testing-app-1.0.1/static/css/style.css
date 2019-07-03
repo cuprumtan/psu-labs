@@ -1,0 +1,136 @@
+body {
+	color: #797979;
+	background: #eaeaea;
+    font-family: 'Ruda', sans-serif;
+    padding: 0px !important;
+    margin: 0px !important;
+    font-size:14px;
+}
+
+.wrapper {
+	margin: auto;
+	width: 800px;
+}
+
+.container {
+	width: 780px;
+	margin-bottom: 10px;
+	padding: 10px;
+}
+
+.container span {
+	font-style: italic;
+}
+
+.main-header {
+	background: #22242a;
+	background-color: #2f323a;
+	color: #f2f2f2;
+	box-shadow: 0px 2px 2px #aab2bd;
+}
+
+.user-info {
+	background-color: #fff;
+	box-shadow: 0px 2px 2px #aab2bd;
+}
+
+.info-label {
+	float: left;
+	width: 150px;
+}
+
+.info-input {
+	float: left;
+	width: 630px;
+}
+
+.info-input input{
+	width: 630px;
+}
+
+.row {
+	height: 30px;
+}
+
+.question {
+	background-color: #fff;
+	box-shadow: 0px 2px 2px #aab2bd;
+}
+
+.question label {
+	margin-left: 10px;
+}
+
+.results {
+	background-color: #fff;
+	box-shadow: 0px 2px 2px #aab2bd;
+}
+
+.result-card {
+	background-color: #eee;
+	padding: 10px;
+	margin-top: 5px;
+	border: 1px #ddd;
+}
+
+.filter-text-left {
+	float: left;
+	width: 60px;
+}
+
+.btns {
+	height: 30px;
+}
+
+.left-btn {
+	margin-left: 10px;
+	float: left;
+}
+
+.btn-submit {
+	background-color: #4ecdc4;
+	color: #fff;
+	border: 1px #48bcb4;
+	padding: 10px 14px;
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	font-size: 15px;
+	box-shadow: 0px 2px 2px #aab2bd;
+}
+
+.btn-small {
+	padding: 6px 10px;
+	font-size: 14px;
+}
+
+.input-error {
+	line-height: 14px;
+	font-size: 10px;
+	color: #ff0000;
+}
+
+.btn-submit:hover {
+	cursor: pointer;
+}
+
+.center-div
+{
+  position: absolute;
+  margin: 0 auto;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+}
+
+.wrong-answer {
+	color: red;
+}
+
+a
+{
+	color: #0f6e6e;
+}

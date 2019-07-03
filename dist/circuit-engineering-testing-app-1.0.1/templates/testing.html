@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Тестирование</title>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="container main-header">
+        <b>Тестирование</b>
+    </div>
+    <form action="result" method="post">
+    <span>Всего найдено {{ questions | length }} вопросов.</span>
+    <br>
+    <br>
+    {% for qid, qobject in questions.items() %}
+        <div class="container question">
+            <span>Вопрос {{ loop.index }}.</span><br><br>
+            <b>{{ qobject.question_text }}</b><br><br>
+                {% for aid, aobject in answers.items() %}
+                        {% if aobject.question_id == qobject.id %}
+                            <label>
+                                <input id="{{ aobject.id }}" type="checkbox" name="{{ qobject.id }}" value="{{ aobject.id }}">
+                                {{ aobject.answer_text }}<br>
+                            </label>
+                        {% endif %}
+                {% endfor %}
+                <br>
+            </div>
+        {% endfor %}
+
+        <div class="container">
+            <button type="submit" class="btn-submit">Завершить тестирование</button>
+        </div>
+
+    </form>
+</div>
+</body>
+
+</html>
