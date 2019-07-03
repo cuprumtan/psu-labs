@@ -7,6 +7,7 @@ from Model import CeSubjects, CeQuestions, CeAnswers, CeSessions
 import re
 import socket
 import datetime
+import webbrowser
 
 
 SECRET_KEY = 'idi_v_svoi_dvor'
@@ -44,6 +45,8 @@ def validatable_ip_v4():
 # обработка главной страницы, редирект на начальную страницу тестирования
 @app.route('/')
 def root():
+    if request.remote_addr in validatable_ip_v4():
+        return redirect('manage')
     return redirect(url_for('test_begin'))
 
 
@@ -200,6 +203,13 @@ def test_result():
     return render_template('result.html', user_answers=score, rigth_answers=questions_count, percent=right_answers_percent)
 
 
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+
+
 # обработка страницы с панелью управления
 @app.route('/manage', methods=['GET', 'POST'])
 def manage_server():
@@ -219,6 +229,9 @@ def manage_server():
         date_to = request.form['date_to']
         course = request.form['course']
         group = request.form['group']
+        if request.form['btn_action'] == 'turn_off':
+            shutdown_server()
+            return 'Выключение сервера...'
         # применение фильтра
         if request.form['btn_action'] != 'clear':
             session['date_from'] = date_from
@@ -497,3 +510,5 @@ def page_not_found(e):
 # старт приложения
 if __name__ == '__main__':
     app.run()
+
+webbrowser.open('http://localhost:5000/manage', new=2)
