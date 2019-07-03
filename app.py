@@ -25,12 +25,19 @@ def get_ipv4():
     all_ip = [i[4][0] for i in socket.getaddrinfo(socket.gethostname(), None)]
     ip_v4 = []
     for ip in all_ip:
-        if len(ip) < 16:
+        if len(ip) < 16 and ip not in ip_v4:
             ip_v4.append(ip)
     return ip_v4
 
 
 ip_v4 = get_ipv4()
+
+
+def validatable_ip_v4():
+    validatable_ip_v4 = []
+    validatable_ip_v4.append('127.0.0.1')
+    validatable_ip_v4.append('localhost')
+    return validatable_ip_v4
 
 
 @app.route('/')
@@ -183,6 +190,8 @@ def test_result():
 def manage_server():
     # p = subprocess.Popen("bash get_my_ip.sh", stdout=subprocess.PIPE, shell=True)
     # (output, err) = p.communicate()
+    if request.remote_addr not in validatable_ip_v4():
+        return redirect('page_not_found')
     if request.method == 'GET':
         date_from = datetime.datetime.now().strftime("%Y-%m-%d")
         date_to = datetime.datetime.now().strftime("%Y-%m-%d")
@@ -231,6 +240,8 @@ class UserAnswer():
 
 @app.route('/advanced_result', methods=['GET'])
 def advanced_result():
+    if request.remote_addr not in validatable_ip_v4():
+        return redirect('page_not_found')
     session_number = request.args.get('session_number')
     session_data = db_session.query(CeSessions.id,
                                     CeSessions.session_number,
