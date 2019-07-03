@@ -171,7 +171,7 @@ def test_result():
             if right_count == right_answered:
                 score = score + 1
         questions_count = len(questions_data)
-        right_answers_percent = round(score/questions_count)*100
+        right_answers_percent = round(float(score)/float(questions_count)*100)
         session.clear()
     return render_template('result.html', user_answers=score, rigth_answers=questions_count, percent=right_answers_percent)
 
