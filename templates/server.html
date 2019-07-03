@@ -22,7 +22,7 @@
         <div class="row"><b>Фильтр:</b></div>
         <div class="row">
             <span>
-                <div class="filter-text-left">Дата с </div><input type="text" name="date_from" pattern="\d\d\.\d\d\.\d\d\d\d" value="{{ session.get('date_from') if session.get('date_from') != None }}"> по <input type="text" name="date_to" pattern="\d\d\.\d\d\.\d\d\d\d" value="{{ session.get('date_to') if session.get('date_to') != None }}">
+                <div class="filter-text-left">Дата с </div><input type="text" name="date_from" pattern="\d\d\d\d-\d\d\-\d\d" value="{{ session.get('date_from') if session.get('date_from') != None }}"> по <input type="text" name="date_to" pattern="\d\d\d\d-\d\d\-\d\d" value="{{ session.get('date_to') if session.get('date_to') != None }}">
             </span>
         </div>
         <div class="row">
@@ -42,22 +42,24 @@
     </div>
     <div class="container results">
         <div class="row"><b>Результаты тестирования:</b></div>
-        <div class="result-card">
-            ФИО:<br>
-            Группа:<br>
-            Курс:<br>
-            Количество вопросов:<br>
-            Дата и время тестирования:<br>
-            <a href="advanced_result" style="margin-top: 10px" target="_blank">Подробные результаты тестирования</a>
+{#        <div class="result-card">#}
+{#            ФИО:<br>#}
+{#            Группа:<br>#}
+{#            Курс:<br>#}
+{#            Количество вопросов:<br>#}
+{#            Дата и время тестирования:<br>#}
+{#            <a href="advanced_result" style="margin-top: 10px" target="_blank">Подробные результаты тестирования</a>#}
+{#        </div>#}
+        {% for session in sessions %}
+            <div class="result-card">
+            ФИО: {{ session.student_name }}<br>
+            Группа: {{ session.student_group }}<br>
+            Курс: {{ session.student_grade }}<br>
+            Результат: {{ session.result_percent }}<br>
+            Дата тестирования: {{ session.session_date }}
+            <a href="advanced_result?session_number={{ session.session_number }}" style="margin-top: 10px" target="_blank">Подробные результаты тестирования</a>
         </div>
-        <div class="result-card">
-            ФИО:<br>
-            Группа:<br>
-            Курс:<br>
-            Количество вопросов:<br>
-            Дата и время тестирования:<br>
-            <a href="advanced_result" style="margin-top: 10px" target="_blank">Подробные результаты тестирования</a>
-        </div>
+        {% endfor %}
     </div>
 
 <div>
