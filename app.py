@@ -288,7 +288,7 @@ def advanced_result():
     return render_template('advanced_results.html', fio=fio, group=group, course=course, date=date, percent=percent, data=questions_array)
 
 
-@app.route('/delete_question', methods=['POST'])
+@app.route('/delete_question', methods=['GET', 'POST'])
 def delete_question():
     questions_data = db_session.query(CeQuestions.id, CeQuestions.question_text).all()
     db_session.commit()
