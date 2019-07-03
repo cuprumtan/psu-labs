@@ -305,6 +305,46 @@ def advanced_result():
     return render_template('advanced_results.html', fio=fio, group=group, course=course, date=date, percent=percent, data=questions_array)
 
 
+@app.route('/delete_subject', methods=['GET', 'POST'])
+def delete_subject():
+    subjects_data = db_session.query(CeSubjects.id, CeSubjects.subject_name).all()
+    db_session.commit()
+    subjects_dict = {}
+    for x in range(len(subjects_data)):
+        subjects_dict[subjects_data[x].id] = subjects_data[x].subject_name
+    if request.method == 'POST':
+        if request.form['btn_action'] == 'delete':
+            subject_id = str(request.form['subject_id'])
+            questions_data = db_session.query(CeQuestions.id).filter(CeQuestions.subject_id == subject_id).all()
+            db_session.commit()
+            db_session.query(CeSubjects).filter(CeSubjects.id == subject_id).delete()
+            db_session.commit()
+            db_session.query(CeQuestions).filter(CeQuestions.subject_id == subject_id).delete()
+            db_session.commit()
+            for x in range(len(questions_data)):
+                db_session.query(CeAnswers).filter(
+                    CeAnswers.question_id == questions_data[x].id).delete()
+                db_session.commit()
+    return render_template('delete_subject.html', subjects=subjects_dict)
+
+
+@app.route('/add_subject', methods=['GET', 'POST'])
+def add_subject():
+    subjects_data = db_session.query(CeSubjects.id, CeSubjects.subject_name).all()
+    db_session.commit()
+    subjects_dict = {}
+    for x in range(len(subjects_data)):
+        subjects_dict[subjects_data[x].id] = subjects_data[x].subject_name
+    if request.method == 'POST':
+        if request.form['btn_action'] == 'add':
+            subject_name = request.form['subject']
+            to_insert = CeSubjects(
+                subject_name=subject_name
+            )
+            db_session.add(to_insert)
+    return render_template('add_subject.html', subjects=subjects_dict)
+
+
 @app.route('/delete_question', methods=['GET', 'POST'])
 def delete_question():
     questions_data = db_session.query(CeQuestions.id, CeQuestions.question_text).all()
@@ -319,8 +359,62 @@ def delete_question():
             db_session.commit()
             db_session.query(CeAnswers).filter(CeAnswers.question_id == question_id).delete()
             db_session.commit()
-            # return question_id
     return render_template('delete_question.html', questions=questions_dict)
+
+
+@app.route('/add_question', methods=['GET', 'POST'])
+def add_question():
+    subjects_data = db_session.query(CeSubjects.id, CeSubjects.subject_name).all()
+    db_session.commit()
+    subjects_dict = {}
+    for x in range(len(subjects_data)):
+        subjects_dict[subjects_data[x].id] = subjects_data[x].subject_name
+    if request.method == 'POST':
+        if request.form['btn_action'] == 'add':
+            question_subject = request.form.getlist('subject')
+            question_text = request.form['text']
+            answer_1 = request.form['ans1']
+            answer_2 = request.form['ans2']
+            answer_3 = request.form['ans3']
+            answer_4 = request.form['ans4']
+            right_answers = request.form.getlist('right-flag')
+            to_insert = CeQuestions(
+                subject_id=question_subject[0],
+                question_text=question_text
+            )
+            db_session.add(to_insert)
+            db_session.commit()
+            question_id = db_session.query(func.max(CeQuestions.id)).all()
+            db_session.commit()
+            to_insert = CeAnswers(
+                question_id=tuple(question_id[0])[0],
+                answer_text=answer_1,
+                is_right=(1 in right_answers)
+            )
+            db_session.add(to_insert)
+            db_session.commit()
+            to_insert = CeAnswers(
+                question_id=tuple(question_id[0])[0],
+                answer_text=answer_2,
+                is_right=(2 in right_answers)
+            )
+            db_session.add(to_insert)
+            db_session.commit()
+            to_insert = CeAnswers(
+                question_id=tuple(question_id[0])[0],
+                answer_text=answer_3,
+                is_right=(3 in right_answers)
+            )
+            db_session.add(to_insert)
+            db_session.commit()
+            to_insert = CeAnswers(
+                question_id=tuple(question_id[0])[0],
+                answer_text=answer_4,
+                is_right=(4 in right_answers)
+            )
+            db_session.add(to_insert)
+            db_session.commit()
+    return render_template('add_question.html', subjects=subjects_dict)
 
 
 @app.errorhandler(405)
