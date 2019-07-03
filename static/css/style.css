@@ -126,6 +126,10 @@ body {
   height: 300px;
 }
 
+.wrong-answer {
+	color: red;
+}
+
 a
 {
 	color: #0f6e6e;

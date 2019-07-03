@@ -17,128 +17,27 @@
             <span>Группа: </span>{{ group }}<br>
             <span>Курс: </span>{{ course }}<br>
             <span>Дата: </span>{{ date }}<br>
+            <span>Результат: </span>{{ percent }}%<br>
         </div>
 
-        {% for qid, qobject in data %}
-        <div class="container question">
-            <span>Вопрос {{ loop.index }}.</span><br><br>
-            <b>{{ qobject.question_text }}</b><br><br>
-                {% for aid, aobject in answers.items() %}
-                        {% if aobject.question_id == qobject.id %}
-                            <label {% if aobject.is_right != True %} style="color: red;" {% endif %}>
-                                <input id="{{ aobject.id }}" type="checkbox" name="{{ qobject.id }}" value="{{ aobject.id }}">
-                                {{ aobject.answer_text }}<br>
-                            </label>
-                        {% endif %}
+        {% for q_object in data %}
+            <div class="container question">
+                <span>Вопрос {{ loop.index }}.</span><br><br>
+                <b>{{ q_object.question_text }}</b><br><br>
+                {% for a_object in q_object.answers %}
+                    {% if a_object.is_right == False %}
+                        <label class="wrong-answer">
+                    {% else %}
+                        <label>
+                    {% endif %}
+                <input id="{{ a_object.id }}" type="checkbox" name="{{ q_object.id }}"
+                       value="{{ a_object.answer_text }}" {% if a_object.checked == True %} checked {% endif %}>
+                {{ a_object.answer_text }}<br>
+                </label>
                 {% endfor %}
                 <br>
             </div>
         {% endfor %}
-
-        <div class="container question" style="background-color: #f5d5d5">
-            <span>Вопрос 1:</span>
-            <br>
-            Чем характеризуются резисторы?
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 1
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number" checked>
-                ответ 2
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 3
-            </label>
-        </div>
-
-        <div class="container question" style="background-color: #d4fad8">
-            <span>Вопрос 1:</span>
-            <br>
-            Чем характеризуются резисторы?
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number" checked>
-                ответ 1
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 2
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 3
-            </label>
-        </div>
-
-        <div class="container question" style="background-color: #d4fad8">
-            <span>Вопрос 1:</span>
-            <br>
-            Чем характеризуются резисторы?
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 1
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number" checked>
-                ответ 2
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number" checked>
-                ответ 3
-            </label>
-        </div>
-
-        <div class="container question" style="background-color: #f5d5d5">
-            <span>Вопрос 1:</span>
-            <br>
-            Чем характеризуются резисторы?
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 1
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number" checked>
-                ответ 2
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 3
-            </label>
-        </div>
-
-        <div class="container question" style="background-color: #d4fad8">
-            <span>Вопрос 1:</span>
-            <br>
-            Чем характеризуются резисторы?
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number" checked>
-                ответ 1
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 2
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" name="answers" value="question_number">
-                ответ 3
-            </label>
-        </div>
 
     </form>
 </div>

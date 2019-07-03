@@ -162,7 +162,7 @@ def test_result():
                         student_group=group,
                         student_grade=course,
                         answer_id=a_object[0],
-                        is_right=a_object[3]
+                        is_right=checked
                     )
                     db_session.add(to_insert)
                     db_session.flush()
@@ -214,11 +214,19 @@ def manage_server():
     db_session.commit()
     return render_template('server.html', ip_list=ip_v4, sessions=sessions_data)
 
+class Question():
+    def __init__(self):
+        self.id = 0
+        self.question_text = ""
+        self.answers = []
+
 class UserAnswer():
-    id = 0
-    question_id = 0
-    answer_text = 0
-    is_right = 0
+    def __init__(self):
+        self.id = 0
+        self.question_id = 0
+        self.answer_text = ""
+        self.checked = False
+        self.is_right = False
 
 @app.route('/advanced_result', methods=['GET'])
 def advanced_result():
@@ -230,13 +238,15 @@ def advanced_result():
                                     CeSessions.student_group,
                                     CeSessions.student_grade,
                                     CeSessions.answer_id,
-                                    CeSessions.is_right)\
+                                    CeSessions.is_right,
+                                    CeSessions.result_percent)\
         .filter(CeSessions.session_number == session_number).all()
     db_session.commit()
     fio = session_data[0].student_name
     group = session_data[0].student_group
     course = session_data[0].student_grade
     date = session_data[0].session_date
+    percent = session_data[0].result_percent
     answers_data = db_session.query(CeAnswers.id,
                                     CeAnswers.answer_text,
                                     CeAnswers.question_id,
@@ -247,18 +257,32 @@ def advanced_result():
                                       CeQuestions.question_text) \
         .filter(CeQuestions.id.in_([answer.question_id for answer in answers_data])).all()
     db_session.commit()
-    id = 0
-    questions_dict = {}
     user_answers = []
     for answer in answers_data:
         for sess_answer in session_data:
             if answer.id == sess_answer.answer_id:
-                answer = UserAnswer()
-    # for session in session_data:
-    #     CeAnswers
-    #     questions_dict[id] =
-    # questions_dict =
-    return render_template('advanced_results.html', fio=fio, group=group, course=course, date=date, data=questions_dict)
+                user_answer = UserAnswer()
+                user_answer.id = answer.id
+                user_answer.question_id = answer.question_id
+                user_answer.answer_text = answer.answer_text
+                user_answer.checked = sess_answer.is_right
+                if sess_answer.is_right == answer.is_right:
+                    user_answer.is_right = True
+                else:
+                    user_answer.is_right = False
+                user_answers.append(user_answer)
+    questions_array = []
+    for question_data in questions_data:
+        answers = []
+        question = Question()
+        question.id = question_data.id
+        question.question_text = question_data.question_text
+        for user_answer in user_answers:
+            if user_answer.question_id == question_data.id:
+                answers.append(user_answer)
+        question.answers = answers
+        questions_array.append(question)
+    return render_template('advanced_results.html', fio=fio, group=group, course=course, date=date, percent=percent, data=questions_array)
 
 
 @app.errorhandler(405)
