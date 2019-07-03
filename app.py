@@ -228,6 +228,7 @@ class UserAnswer():
         self.checked = False
         self.is_right = False
 
+
 @app.route('/advanced_result', methods=['GET'])
 def advanced_result():
     session_number = request.args.get('session_number')
@@ -257,6 +258,8 @@ def advanced_result():
                                       CeQuestions.question_text) \
         .filter(CeQuestions.id.in_([answer.question_id for answer in answers_data])).all()
     db_session.commit()
+    id = 0
+    questions_dict = {}
     user_answers = []
     for answer in answers_data:
         for sess_answer in session_data:
@@ -283,6 +286,19 @@ def advanced_result():
         question.answers = answers
         questions_array.append(question)
     return render_template('advanced_results.html', fio=fio, group=group, course=course, date=date, percent=percent, data=questions_array)
+
+
+@app.route('/delete_question', methods=['POST'])
+def delete_question():
+    questions_data = db_session.query(CeQuestions.id, CeQuestions.question_text).all()
+    db_session.commit()
+    questions_dict = {}
+    for x in range(len(questions_data)):
+        questions_dict[questions_data[x].id] = questions_data[x].question_text
+    if request.method == 'POST':
+        if request.form['btn_action'] == 'delete':
+            return 'КЕК'
+    return render_template('delete_question.html', questions=questions_dict)
 
 
 @app.errorhandler(405)

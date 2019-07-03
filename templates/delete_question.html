@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Удалить вопрос</title>
+</head>
+<body>
+<div class="wrapper">
+
+	<div class="container main-header">
+		<b>Удалить вопрос</b>
+	</div>
+
+<form action="manage" method="post">
+    <div class="container results">
+         <div class="row"><b>Введите номер вопроса, который нужно удалить:</b></div>
+        <div class="row">
+            <span>
+                <div class="filter-text-left">Номер </div><input type="text" name="question_id">
+            </span>
+        </div>
+         <div class="btns">
+            <button type="submit" name="btn_action" value="delete" class="btn-submit btn-small left-btn">Удалить вопрос</button>
+        </div>
+    </div>
+    <div class="container results">
+        <div class="row"><b>Вопросы:</b></div>
+        {% for key, value in questions.items() %}
+            <div class="result-card">
+                {{ key }}. {{ value }}
+            </div>
+        {% endfor %}
+    </div>
+
+<div>
+
+</div>
+
+</form>
+</div>
+
+</body>
+</html>
