@@ -219,14 +219,16 @@ def manage_server():
                                      CeSessions.student_grade,
                                      CeSessions.result_percent) \
         .distinct(CeSessions.session_number)
-    if date_from != None:
-        query.filter(CeSessions.session_date >= date_from)
-    if date_to != None:
-        query.filter(CeSessions.session_date <= date_to)
-    if course != None:
-        query.filter(CeSessions.student_grade == course)
-    if group != None:
-        query.filter(CeSessions.student_group == group)
+    conditions = []
+    if date_from != None and date_from !='':
+        conditions.append(CeSessions.session_date >= date_from)
+    if date_to != None and date_to !='':
+        conditions.append(CeSessions.session_date <= date_to)
+    if course != None and course !='':
+        conditions.append(CeSessions.student_grade == course)
+    if group != None and group !='':
+        conditions.append(CeSessions.student_group == group)
+    query = query.filter(*conditions)
     sessions_data = query.order_by(CeSessions.session_number).all()
     db_session.commit()
     return render_template('server.html', ip_list=ip_v4, sessions=sessions_data)
