@@ -146,7 +146,6 @@ def test_result():
         fio = session.get('fio')# фио студента
         group = session.get('group')# группа
         course = session.get('course')# курс
-        # right_answers_count = session.get('right_answers_count')
         score = 0
         for q_object in questions_data:
             answered = request.form.getlist(str(q_object[0]))
@@ -195,6 +194,9 @@ def manage_server():
     if request.method == 'GET':
         date_from = datetime.datetime.now().strftime("%Y-%m-%d")
         date_to = datetime.datetime.now().strftime("%Y-%m-%d")
+        course = None
+        course = None
+        group = None
     if request.method == 'POST':
         date_from = request.form['date_from']
         date_to = request.form['date_to']
@@ -210,16 +212,22 @@ def manage_server():
             session.clear()
             date_from = datetime.datetime.now().strftime("%Y-%m-%d")
             date_to = datetime.datetime.now().strftime("%Y-%m-%d")
-    sessions_data = db_session.query(CeSessions.session_number,
+    query = db_session.query(CeSessions.session_number,
                                      CeSessions.session_date,
                                      CeSessions.student_name,
                                      CeSessions.student_group,
                                      CeSessions.student_grade,
                                      CeSessions.result_percent) \
-        .distinct(CeSessions.session_number) \
-        .filter(CeSessions.session_date >= date_from) \
-        .filter(CeSessions.session_date <= date_to) \
-        .order_by(CeSessions.session_number).all()
+        .distinct(CeSessions.session_number)
+    if date_from != None:
+        query.filter(CeSessions.session_date >= date_from)
+    if date_to != None:
+        query.filter(CeSessions.session_date <= date_to)
+    if course != None:
+        query.filter(CeSessions.student_grade == course)
+    if group != None:
+        query.filter(CeSessions.student_group == group)
+    sessions_data = query.order_by(CeSessions.session_number).all()
     db_session.commit()
     return render_template('server.html', ip_list=ip_v4, sessions=sessions_data)
 
@@ -269,8 +277,6 @@ def advanced_result():
                                       CeQuestions.question_text) \
         .filter(CeQuestions.id.in_([answer.question_id for answer in answers_data])).all()
     db_session.commit()
-    id = 0
-    questions_dict = {}
     user_answers = []
     for answer in answers_data:
         for sess_answer in session_data:
