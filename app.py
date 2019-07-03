@@ -8,6 +8,7 @@ import re
 import socket
 import datetime
 import webbrowser
+import threading
 
 
 SECRET_KEY = 'idi_v_svoi_dvor'
@@ -243,10 +244,6 @@ def manage_server():
             session.clear()
             date_from = datetime.datetime.now().strftime("%Y-%m-%d")
             date_to = datetime.datetime.now().strftime("%Y-%m-%d")
-        if request.form['btn_action'] == 'truncate':
-            db_session.query(CeSessions).filter(
-                CeSessions.id.isnot(None)).delete()
-            db_session.commit()
     # поиск номеров уникальных сессий
     query = db_session.query(CeSessions.session_number,
                              CeSessions.session_date,
@@ -513,7 +510,5 @@ def page_not_found(e):
 
 # старт приложения
 if __name__ == '__main__':
+    threading.Timer(1.25, lambda: webbrowser.open('http://localhost:5000/manage', new=2)).start()
     app.run()
-
-# webbrowser.open('http://localhost:5000/manage', new=2)
-webbrowser.open('http://localhost:5000/manage', new=0, autoraise=True)
