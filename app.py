@@ -297,7 +297,12 @@ def delete_question():
         questions_dict[questions_data[x].id] = questions_data[x].question_text
     if request.method == 'POST':
         if request.form['btn_action'] == 'delete':
-            return 'КЕК'
+            question_id = str(request.form['question_id'])
+            db_session.query(CeQuestions).filter(CeQuestions.id == question_id).delete()
+            db_session.commit()
+            db_session.query(CeAnswers).filter(CeAnswers.question_id == question_id).delete()
+            db_session.commit()
+            # return question_id
     return render_template('delete_question.html', questions=questions_dict)
 
 
