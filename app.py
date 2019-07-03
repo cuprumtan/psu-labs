@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, redirect, url_for, request, session
 # from flask.ext.session import Session
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, update
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.expression import func
 from Model import CeSubjects, CeQuestions, CeAnswers, CeSessions
@@ -172,6 +172,9 @@ def test_result():
                 score = score + 1
         questions_count = len(questions_data)
         right_answers_percent = round(float(score)/float(questions_count)*100)
+        db_session.query(CeSessions).filter(CeSessions.session_number == session.get('number')).\
+            update({CeSessions.result_percent: right_answers_percent}, synchronize_session=False)
+        db_session.commit()
         session.clear()
     return render_template('result.html', user_answers=score, rigth_answers=questions_count, percent=right_answers_percent)
 
