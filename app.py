@@ -515,4 +515,4 @@ def page_not_found(e):
 # старт приложения
 if __name__ == '__main__':
     threading.Timer(1.25, lambda: webbrowser.open('http://localhost:5000/manage', new=2)).start()
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
