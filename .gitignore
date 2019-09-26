@@ -1,3 +1,5 @@
 crypto/DES/.idea/*
 crypto/DES/CMakeLists.txt
-crypto/DES/cmake-build-debug/*
+crypto/DES/cmake-build-debug/
+crypto/DES-python/.idea/*
+crypto/DES-python/venv/*
