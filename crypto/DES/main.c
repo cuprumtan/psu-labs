@@ -7,8 +7,9 @@
 struct DES_configs {
     char plain_text_buffer[MAXCHAR];
     char key_text_buffer[MAXCHAR];
+    int  plain_text_binary[64];
+    int  key_text_binary[56];
 } configs;
-
 
 FILE *config_file;
 char buffer[MAXCHAR];
@@ -42,6 +43,18 @@ read_config (int argc, char *argv[])
     }
 }
 
+void
+char_to_binary (char *input_buffer, int size, int *output_buffer)
+{
+    int count = 0;
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < 8; j++) {
+            output_buffer[count] = !!((input_buffer[i] << j) & 0x80);
+            count++;
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
     read_config(argc, argv);
     printf("PSU, 2019\n");
@@ -52,4 +65,12 @@ int main(int argc, char *argv[]) {
     printf("| Plain text: %s |\n", configs.plain_text_buffer);
     printf("| Key text:   %s  |\n", configs.key_text_buffer);
     printf("------------------------\n");
+    printf("\n");
+    printf("DES\n");
+    printf("|\n");
+    printf("|---Binary input data\n");
+    printf("|\n");
+    char_to_binary(configs.plain_text_buffer, 8, configs.plain_text_binary);
+    for (int i = 0; i < 64; i++)
+        printf("5d", configs.plain_text_binary[i]);
 }
