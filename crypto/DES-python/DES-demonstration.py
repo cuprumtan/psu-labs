@@ -2,7 +2,7 @@ import binascii
 import numpy
 import yaml
 
-# read configs
+# считывание параметров - исходного блока и ключа
 with open('DES.yml', 'r') as file:
     config = yaml.load(file)
 
@@ -13,7 +13,7 @@ key_text_binary_ro = []
 plain_text_binary_rw = []
 key_text_binary_rw = []
 
-# initial permutation
+# начальная перестановка IP
 IP_table = [58, 50, 42, 34, 26, 18, 10, 2,
             60, 52, 44, 36, 28, 20, 12, 4,
             62, 54, 46, 38, 30, 22, 14, 6,
@@ -23,6 +23,7 @@ IP_table = [58, 50, 42, 34, 26, 18, 10, 2,
             61, 53, 45, 37, 29, 21, 13, 5,
             63, 55, 47, 39, 31, 23, 15, 7]
 
+# начальная перестановка ключа
 KP_table = [57, 49, 41, 33, 25, 17, 9, 8,
             1, 58, 50, 42, 34, 26, 18, 16,
             10, 2, 59, 51, 43, 35, 27, 24,
@@ -32,15 +33,18 @@ KP_table = [57, 49, 41, 33, 25, 17, 9, 8,
             14, 6, 61, 53, 45, 37, 29, 56,
             21, 13, 5, 28, 20, 12, 4, 64]
 
-key_table = [14, 17, 11, 24, 1, 5, 3, 28,
-             15, 6, 21, 10, 23, 19, 12, 4,
-             26, 8, 16, 7, 27, 20, 13, 2,
+# раундовая перестановка для формирования ключа
+key_table = [14, 17, 11, 24,  1,  5,  3, 28,
+             15,  6, 21, 10, 23, 19, 12,  4,
+             26,  8, 16,  7, 27, 20, 13,  2,
              41, 52, 31, 37, 47, 55, 30, 40,
              51, 45, 33, 48, 44, 49, 39, 56,
              34, 53, 46, 42, 50, 36, 29, 32]
 
+# сдвиги для векторов C0 и D0 для каждого раунда
 key_shift = [1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1]
 
+# функция расширения E
 E_table = [32,  1,  2,  3,  4,  5,  4,  5,
             6,  7,  8,  9,  8,  9, 10, 11,
            12, 13, 12, 13, 14, 15, 16, 17,
@@ -48,6 +52,7 @@ E_table = [32,  1,  2,  3,  4,  5,  4,  5,
            22, 23, 24, 25, 24, 25, 26, 27,
            28, 29, 28, 29, 30, 31, 32, 1]
 
+# S-блоки для раундовых ключей
 S_blocks = [
     [[14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7],
      [ 0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8],
@@ -90,11 +95,13 @@ S_blocks = [
      [ 2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11]]
 ]
 
+# перестановка P для B'
 P_table = [16,  7, 20, 21, 29, 12, 28, 17,
             1, 15, 23, 26,  5, 18, 31, 10,
             2,  8, 24, 14, 32, 27,  3,  9,
            19, 13, 30,  6, 22, 11,  4, 25]
 
+# конечная перестановка IP - 1
 IP_1_table = [40,  8, 48, 16, 56, 24, 64, 32,
               39,  7, 47, 15, 55, 23, 63, 31,
               38,  6, 46, 14, 54, 22, 62, 30,
@@ -105,16 +112,18 @@ IP_1_table = [40,  8, 48, 16, 56, 24, 64, 32,
               33,  1, 41,  9, 49, 17, 57, 25]
 
 
-
+# функция преобразования
 def char_to_binary(content, encoding='utf-8', errors='surrogatepass'):
     bits = bin(int(binascii.hexlify(content.encode(encoding, errors)), 16))[2:]
     return [int(x) for x in list(bits.zfill(8 * ((len(bits) + 7) // 8)))]
 
 
+# функция для применения перестановки
 def permute(content, reference):
     return [int(content[x - 1]) for x in reference]
 
 
+# функция для добавления битов четности
 def add_parity_bits(content):
     result = []
     count = 0
@@ -135,6 +144,7 @@ def add_parity_bits(content):
     return [int(x) for x in result]
 
 
+# вычисление вектора C0
 def define_C0(content):
     result = []
     for i in range(32):
@@ -143,6 +153,7 @@ def define_C0(content):
     return [int(x) for x in result]
 
 
+# вычисление вектора D0
 def define_D0(content):
     result = []
     for i in range(32, 64):
@@ -151,10 +162,12 @@ def define_D0(content):
     return [int(x) for x in result]
 
 
+# сдвиг вектора
 def shift(content, step):
     return list(numpy.roll(content, -int(step)))
 
 
+# функция генерирования ключей
 def generate_keys(C0, D0):
     keys = []
     for i in range(16):
@@ -168,6 +181,7 @@ def generate_keys(C0, D0):
     return keys
 
 
+# функция применения S-блока
 def S_block(content, iteration):
     p = int(str(content[0]) + str(content[5]), 2)
     q = int(''.join(str(x) for x in (content[1:5])), 2)
@@ -177,6 +191,7 @@ def S_block(content, iteration):
     return [int(x) for x in result]
 
 
+# раундовая функция
 def round_function(content, round, keys):
     E = permute(content + [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], E_table)
     xor = numpy.bitwise_xor(E, keys[round])
@@ -190,6 +205,7 @@ def round_function(content, round, keys):
     return [int(x) for x in P_blocks]
 
 
+# функция шифрования
 def cipher(content, keys):
     L = content[0:32]
     R = content[32:64]
@@ -214,7 +230,7 @@ def cipher(content, keys):
     print('|    |    |')
     print('|    |    | Таблица IP - 1:')
     print('|    |    |', end='')
-    print_as_table(IP_1_table, '\n|    |     |')
+    print_as_table(IP_1_table, '\n|    |    |')
     print('\n|    |    |')
     print('|    |    | Результат применения таблицы IP - 1 к тексту:')
     print('|    |    | ', end='')
@@ -224,6 +240,7 @@ def cipher(content, keys):
     return result
 
 
+# функция расшифрования
 def decipher(content, keys):
     print('| ')
     print('| Расшифрование')
@@ -256,10 +273,11 @@ def decipher(content, keys):
         L = L_new
         R = R_new
     deciphered = L + R
-    # return permute(decihpered, IP_1_table)
+    return permute(deciphered, IP_1_table)
     return deciphered
 
 
+# печать векторов как талицы с разделителем
 def print_as_table(content, delimiter):
     for i in range(64):
         if i % 8 == 0:
@@ -270,6 +288,7 @@ def print_as_table(content, delimiter):
             print('0{} '.format(content[i]), end='')
 
 
+# главный вывод (терминал)
 def output():
     global plain_text_binary_ro
     global key_text_binary_ro
@@ -350,7 +369,7 @@ def output():
     print()
     print('Результат работы DES кратко:')
     print('-------------------------------------------------------------------------------------------------------')
-    print('| Входной текст:  {}  |  BIN: {}  |'.format(''.join(str(x) for x in plain_text_char), ''.join(str(x) for x in plain_text_binary_rw)))
+    print('| Входной текст:  {}  |  BIN: {}  |'.format(''.join(str(x) for x in plain_text_char), ''.join(str(x) for x in plain_text_binary_ro)))
     print('| Зашифр. текст:            |  BIN: {}  |'.format(''.join(str(x) for x in cipher_text)))
     print('| Выходной текст: {}  |  BIN: {}  |'.format(''.join(str(x) for x in plain_text_char), ''.join(str(x) for x in decipher_text)))
     print('-------------------------------------------------------------------------------------------------------')
