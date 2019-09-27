@@ -113,7 +113,7 @@ IP_1_table = [40,  8, 48, 16, 56, 24, 64, 32,
 
 
 # функция преобразования
-def char_to_binary(content, encoding='utf-8', errors='surrogatepass'):
+def char_to_binary(content, encoding='ascii', errors='surrogatepass'):
     bits = bin(int(binascii.hexlify(content.encode(encoding, errors)), 16))[2:]
     return [int(x) for x in list(bits.zfill(8 * ((len(bits) + 7) // 8)))]
 
