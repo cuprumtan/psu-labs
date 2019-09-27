@@ -210,7 +210,54 @@ def cipher(content, keys):
         L = L_new
         R = R_new
     encrypted = L + R
-    return permute(encrypted, IP_1_table)
+    print('|    |--- IP-1')
+    print('|    |    |')
+    print('|    |    | Таблица IP - 1:')
+    print('|    |    |', end='')
+    print_as_table(IP_1_table, '\n|    |     |')
+    print('\n|    |    |')
+    print('|    |    | Результат применения таблицы IP - 1 к тексту:')
+    print('|    |    | ', end='')
+    result = permute(encrypted, IP_1_table)
+    print_as_table(result, '\n|    |    | ')
+    print('\n|    |    | ')
+    return result
+
+
+def decipher(content, keys):
+    print('| ')
+    print('| Расшифрование')
+    print('| ')
+    print('|--- IP-1')
+    print('|    |')
+    print('|    | Таблица IP:')
+    print('|    |')
+    print('|    | Результат применения таблицы IP к тексту:')
+    print('|    | ', end='')
+    binary = permute(content, IP_table)
+    print_as_table(binary, '\n|    | ')
+    print('\n|    | ')
+    L = binary[0:32]
+    R = binary[32:64]
+    L_new = []
+    R_new = []
+    for i in range(15, -1, -1):
+        print('|    |--- Раунд {}'.format(i + 1))
+        print('|    |    |')
+        R_new = L
+        L_new = list(numpy.bitwise_xor(round_function(L, i, keys), R))
+        print('|    |    | R = ', ''.join(str(x) for x in R))
+        print('|    |    | L = ', ''.join(str(x) for x in L))
+        print('|    |    | ')
+        print('|    |    | R prev = ', ''.join(str(x) for x in R_new))
+        print('|    |    | L prev = f(L, K_{}'.format(i + 1), ') XOR R = ', ''.join(str(x) for x in L_new))
+        print('|    |    | ')
+        print('|    |')
+        L = L_new
+        R = R_new
+    deciphered = L + R
+    # return permute(decihpered, IP_1_table)
+    return deciphered
 
 
 def print_as_table(content, delimiter):
@@ -290,13 +337,23 @@ def output():
     print('|    | ', end='')
     plain_text_binary_rw = permute(plain_text_binary_ro, IP_table)
     print_as_table(plain_text_binary_rw, '\n|    | ')
-    print('\n')
-    print('|    | ')
+    print('\n|    | ')
+    input('|    | ')
     print('|--- Выполнение раундов')
     print('|    |')
     cipher_text = cipher(plain_text_binary_rw, keys)
     print('|    | Итоговая зашифрованная последовательность:')
     print('|    |', ''.join(str(x) for x in cipher_text))
+    input('|    |')
+    decipher_text = decipher(cipher_text, keys)
+    print('|    | Расшифрованная последовательность: ', ''.join(str(x) for x in decipher_text))
+    print()
+    print('Результат работы DES кратко:')
+    print('-------------------------------------------------------------------------------------------------------')
+    print('| Входной текст:  {}  |  BIN: {}  |'.format(''.join(str(x) for x in plain_text_char), ''.join(str(x) for x in plain_text_binary_rw)))
+    print('| Зашифр. текст:            |  BIN: {}  |'.format(''.join(str(x) for x in cipher_text)))
+    print('| Выходной текст: {}  |  BIN: {}  |'.format(''.join(str(x) for x in plain_text_char), ''.join(str(x) for x in decipher_text)))
+    print('-------------------------------------------------------------------------------------------------------')
 
 
 output()
