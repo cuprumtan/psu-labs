@@ -4,3 +4,5 @@ crypto/DES/cmake-build-debug/
 crypto/DES-python/.idea/*
 crypto/DES-python/venv/*
 crypto/DES/a.out
+crypto/hash-collision/venv/*
+crypto/hash-collision/.idea/*
