@@ -1,8 +1,10 @@
 crypto/DES/.idea/*
 crypto/DES/CMakeLists.txt
-crypto/DES/cmake-build-debug/
+crypto/DES/cmake-build-debug/*
 crypto/DES-python/.idea/*
 crypto/DES-python/venv/*
 crypto/DES/a.out
 crypto/hash-collision/venv/*
 crypto/hash-collision/.idea/*
+crypto/math-samples/.idea/*
+crypto/math-samples/venv/*
