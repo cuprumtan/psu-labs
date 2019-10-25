@@ -36,4 +36,5 @@ def discrete_logarithm(a, b, m):
 a = 15
 b = 46
 m = 53
+
 print(discrete_logarithm(a, b, m))
