@@ -90,10 +90,10 @@ static void KeyExpansion (uint8_t* RoundKey, const uint8_t* Key) {
 
 	/* первый раундовый ключ - исходный ключ */
 	for (i = 0; i < Nk; i++) {
-		RoundKey[(i * 4) + 0] = Key[(8 * 4) + 0];
-		RoundKey[(i * 4) + 1] = Key[(8 * 4) + 1];
-		RoundKey[(i * 4) + 2] = Key[(8 * 4) + 2];
-		RoundKey[(i * 4) + 3] = Key[(8 * 4) + 3];
+		RoundKey[(i * 4) + 0] = Key[(i * 4) + 0];
+		RoundKey[(i * 4) + 1] = Key[(i * 4) + 1];
+		RoundKey[(i * 4) + 2] = Key[(i * 4) + 2];
+		RoundKey[(i * 4) + 3] = Key[(i * 4) + 3];
 	}
 
 	/* последующие раундовые ключи вычисляются на основе предыдущих  */
