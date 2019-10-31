@@ -1,30 +1,29 @@
 #include <stdint.h>
 
 
-
 #ifndef AES_H
 #define AES_H
 
 
-
 // define encryption mode
-
 #ifndef EBC
   #define EBC 1
 #endif
+
 
 #ifndef CCB
   #define CCB 1
 #endif
 
+
 #ifndef CTR
   #define CTR 1
 #endif
 
+
 #define AES128 1
 // #define AES192 1
 // #define AES256 1
-
 
 
 //define AES parameters
@@ -33,13 +32,13 @@
 // Nr		number of rounds
 // KEYLENGTH	key length in bytes
 // KEYEXPSIZE	number of words in expanded key
-
 // block length in bytes
 #define BLOCKLENGTH 16
 
-// AES main parameters
 
+// AES main parameters
 #define Nb 4
+
 
 #if defined(AES256) && (AES256 == 1)
 	#define KEYLENGTH 32
@@ -59,9 +58,7 @@
 #endif
 
 
-
 // AES structure
-
 struct AES_context
 {
 	uint8_t RoundKey[KEYEXPSIZE];
@@ -71,7 +68,29 @@ struct AES_context
 };
 
 
-
 // AES functions
+void AES_init_context(struct AES_context* context, const uint8_t* key);
+#if (defined(CBC) && (CBC == 1)) || (defined(CTR) && (CTR == 1))
+void AES_init_context_initvector(struct AES_context* context, const uint8_t* key, const uint8_t* initvector);
+void AES_context_set_initvector(struct AES_context* context, const uint8_t* initvector);
+#endif
 
-void AES_init_context();
+
+#if defined(ECB) && (ECB == 1)
+void AES_ECB_encrypt(const struct AES_context* context, uint8_t* buffer);
+void AES_ECB_decrypt(const struct AES_context* context, uint8_t* buffer);
+#endif
+
+
+#if defined(CBC) && (CBC == 1)
+void AES_CBC_encrypt_buffer(const struct AES_context* context, uint8_t* buffer, uint8_t* length);
+void AES_CBC_decrypt_buffer(const struct AES_context* context, uint8_t* buffer, uint8_t* length);
+#endif
+
+
+#if defined(CTR) && (CTR == 1)
+void AES_CTR_encrypt_buffer(const struct AES_context* context, uint8_t* buffer, uint8_t* length);
+#endif
+
+
+#endif
