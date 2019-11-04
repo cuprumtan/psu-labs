@@ -216,10 +216,59 @@ static void ShiftRows(state_t* state)
  S'3 = (3 * S0) XOR S1 XOR S2 XOR (2 * S3)
 */
 
+/* ИЗУЧИТЬ -------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------*/
+static uint8_t xtime(uint8_t x)
+{
+    return ((x<<1) ^ (((x>>7) & 1) * 0x1b));
+}
+
 static void MixColumns(state_t* state)
 {
-    
+    uint8_t i;
+    uint8_t Tmp, Tm, t;
+    for (i = 0; i < 4; i++)
+    {
+        t   = (*state)[i][0];
+        Tmp = (*state)[i][0] ^ (*state)[i][1] ^ (*state)[i][2] ^ (*state)[i][3];
+        Tm  = (*state)[i][0] ^ (*state)[i][1]; Tm = xtime(Tm);  (*state)[i][0] ^= Tm ^ Tmp;
+        Tm  = (*state)[i][1] ^ (*state)[i][2]; Tm = xtime(Tm);  (*state)[i][1] ^= Tm ^ Tmp;
+        Tm  = (*state)[i][2] ^ (*state)[i][3]; Tm = xtime(Tm);  (*state)[i][2] ^= Tm ^ Tmp;
+        Tm  = (*state)[i][3] ^ t;              Tm = xtime(Tm);  (*state)[i][3] ^= Tm ^ Tmp;
+    }
 }
+
+/* Умножение в GF(2^8) */
+static uint8_t Multiply(uint8_t x, uint8_t y)
+{
+    return (((y & 1) * x) ^
+            ((y>>1 & 1) * xtime(x)) ^
+            ((y>>2 & 1) * xtime(xtime(x))) ^
+            ((y>>3 & 1) * xtime(xtime(xtime(x)))) ^
+            ((y>>4 & 1) * xtime(xtime(xtime(xtime(x))))));
+}
+
+
+static void InvMixColumns(state_t* state)
+{
+    int i;
+    uint8_t a, b, c, d;
+    for (i = 0; i < 4; i++)
+    {
+        a = (*state)[i][0];
+        b = (*state)[i][1];
+        c = (*state)[i][2];
+        d = (*state)[i][3];
+
+        (*state)[i][0] = Multiply(a, 0x0e) ^ Multiply(b, 0x0b) ^ Multiply(c, 0x0d) ^ Multiply(d, 0x09);
+        (*state)[i][1] = Multiply(a, 0x09) ^ Multiply(b, 0x0e) ^ Multiply(c, 0x0b) ^ Multiply(d, 0x0d);
+        (*state)[i][2] = Multiply(a, 0x0d) ^ Multiply(b, 0x09) ^ Multiply(c, 0x0e) ^ Multiply(d, 0x0b);
+        (*state)[i][3] = Multiply(a, 0x0b) ^ Multiply(b, 0x0d) ^ Multiply(c, 0x09) ^ Multiply(d, 0x0e);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------*/
+
 
 int main() {
     printf("Hello, World!\n");
