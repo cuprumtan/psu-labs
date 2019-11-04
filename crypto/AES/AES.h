@@ -15,4 +15,9 @@
 #define Nk 4                /* количество слов в ключе */
 #define Nr 10               /* количество раундов */
 
+struct AES_context
+{
+    uint8_t RoundKey[KEYEXPSIZE];
+};
+
 #endif

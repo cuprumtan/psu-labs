@@ -94,7 +94,6 @@ static void KeyExpansion(uint8_t* RoundKey, const uint8_t* Key)
         /* если i кратно 4, то применяем к wi-1 слову преобразование */
         if (i % Nk == 0)
         {
-
             /* Фцнкция создает смещение [a0,a1,a2,a3] -> [a1,a2,a3,a0]
                RotWord() */
             {
@@ -158,6 +157,7 @@ static void AddRoundKey(uint8_t round, state_t* state, const uint8_t* RoundKey)
 static void SubBytes(state_t* state)
 {
     uint8_t i, j;
+
     for (i = 0; i < 4; i++)
     {
         for (j = 0; j < 4; j++)
@@ -198,6 +198,7 @@ static void ShiftRows(state_t* state)
     (*state)[1][3] = temp_byte;
 }
 
+
 /*
  Обрабатывает State по колонкам, трактуя каждую из них как полином третьей степени.
  Над этими полиномами производится умножение в GF(2^8) по модулю x^4+1 на фиксированный многочлен c(x)=3x^3+x^2+x+2.
@@ -223,10 +224,12 @@ static uint8_t xtime(uint8_t x)
     return ((x<<1) ^ (((x>>7) & 1) * 0x1b));
 }
 
+
 static void MixColumns(state_t* state)
 {
     uint8_t i;
     uint8_t Tmp, Tm, t;
+
     for (i = 0; i < 4; i++)
     {
         t   = (*state)[i][0];
@@ -237,6 +240,7 @@ static void MixColumns(state_t* state)
         Tm  = (*state)[i][3] ^ t;              Tm = xtime(Tm);  (*state)[i][3] ^= Tm ^ Tmp;
     }
 }
+
 
 /* Умножение в GF(2^8) */
 static uint8_t Multiply(uint8_t x, uint8_t y)
@@ -253,6 +257,7 @@ static void InvMixColumns(state_t* state)
 {
     int i;
     uint8_t a, b, c, d;
+
     for (i = 0; i < 4; i++)
     {
         a = (*state)[i][0];
@@ -268,6 +273,116 @@ static void InvMixColumns(state_t* state)
 }
 
 /*----------------------------------------------------------------------------------------------*/
+
+
+/*
+ Инвертированная функция SubBytes для дешифрования.
+*/
+static void InvSubBytes(state_t* state)
+{
+    uint8_t i, j;
+
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < 4; j++)
+        {
+            (*state)[j][i] = getSBoxInvert((*state)[j][i]);
+        }
+    }
+}
+
+
+/*
+ Инвертированная функция ShiftRows для дешифрования.
+*/
+static void InvShiftRows(state_t* state)
+{
+    uint8_t temp_byte;
+
+    /* смещение 1 строки */
+    temp_byte = (*state)[3][1];
+    (*state)[3][1] = (*state)[2][1];
+    (*state)[2][1] = (*state)[1][1];
+    (*state)[1][1] = (*state)[0][1];
+    (*state)[0][1] = temp_byte;
+
+    /* смещение 2 строки */
+    temp_byte = (*state)[0][2];
+    (*state)[0][2] = (*state)[2][2];
+    (*state)[2][2] = temp_byte;
+    temp_byte = (*state)[1][2];
+    (*state)[1][2] = (*state)[3][2];
+    (*state)[3][2] = temp_byte;
+
+    /* смещение 3 строки */
+    temp_byte = (*state)[0][3];
+    (*state)[0][3] = (*state)[1][3];
+    (*state)[1][3] = (*state)[2][3];
+    (*state)[2][3] = (*state)[3][3];
+    (*state)[3][3] = temp_byte;
+}
+
+
+/* функция шифрования блока */
+static void Cipher(state_t* state, const uint8_t* RoundKey)
+{
+    uint8_t round = 0;
+
+    /* Добавление первого раундового ключа */
+    AddRoundKey(0, state, RoundKey);
+
+    /* Выполнение Nr раундов начиная с 1 и до Nr-1 */
+    for (round = 1; round < Nr; round++)
+    {
+        SubBytes(state);
+        ShiftRows(state);
+        MixColumns(state);
+        AddRoundKey(round, state, RoundKey);
+    }
+
+    /* Раунд Nr */
+    SubBytes(state);
+    ShiftRows(state);
+    AddRoundKey(Nr, state, RoundKey);
+}
+
+
+/* функция дешифрования блока */
+static void InvCipher(state_t* state, const uint8_t* RoundKey)
+{
+    uint8_t round = 0;
+
+    /* Добавление первого раундового ключа */
+    AddRoundKey(Nr, state, RoundKey);
+
+    /* Выполнение Nr раундов начиная с Nr-1 и до 1 */
+    for (round = (Nr - 1); round > 0; --round)
+    {
+        InvShiftRows(state);
+        InvSubBytes(state);
+        AddRoundKey(round, state, RoundKey);
+        InvMixColumns(state);
+    }
+
+    /* Раунд 1 */
+    InvShiftRows(state);
+    InvSubBytes(state);
+    AddRoundKey(0, state, RoundKey);
+}
+
+
+/* функция шифрования текста */
+void AES_encrypt(const struct AES_context* context, uint8_t* buffer)
+{
+    Cipher((state_t*)buffer, context->RoundKey);
+}
+
+
+/* функция дешифрования текста */
+void AES_decrypt(const struct AES_context* context, uint8_t* buffer)
+{
+    InvCipher((state_t*)buffer, context->RoundKey);
+}
 
 
 int main() {
