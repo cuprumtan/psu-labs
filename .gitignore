@@ -8,3 +8,6 @@ crypto/hash-collision/venv/*
 crypto/hash-collision/.idea/*
 crypto/math-samples/.idea/*
 crypto/math-samples/venv/*
+crypto/AES/.idea/*
+crypto/AES/CMakeLists.txt
+crypto/AES/cmake-build-debug/*
