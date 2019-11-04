@@ -132,6 +132,11 @@ static void KeyExpansion(uint8_t* RoundKey, const uint8_t* Key)
     }
 }
 
+void AES_init_context(struct AES_context* context, const uint8_t* key)
+{
+    KeyExpansion(context->RoundKey, key);
+}
+
 
 /*
  В преобразовании AddRoundKey, раундовый ключ RK добавляется к state посредством побитового XOR каждого байта

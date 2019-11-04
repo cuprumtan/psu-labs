@@ -20,4 +20,8 @@ struct AES_context
     uint8_t RoundKey[KEYEXPSIZE];
 };
 
+void AES_init_context(struct AES_context* context, const uint8_t* key);
+void AES_encrypt(const struct AES_context* context, uint8_t* buffer);
+void AES_decrypt(const struct AES_context* context, uint8_t* buffer);
+
 #endif
