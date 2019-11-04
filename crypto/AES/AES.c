@@ -51,6 +51,10 @@ static const uint8_t RCon[11] = {
         0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36};
 
 
+#define getSBoxValue(i) (Sbox[(i)])
+#define getSBoxInvert(i) (InvSbox[(i)])
+
+
 /*
  Функция расширения ключа KeyExpansion
 
