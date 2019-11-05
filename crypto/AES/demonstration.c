@@ -129,8 +129,6 @@ int main() {
     printf(" Текст в HEX: "); print_hex(new_plain_text); printf("\n");
     printf("-------------------------------------------------------------------------------------------------------\n");
 
-    printf("        Шифр: ");
-
     struct AES_context context;
     AES_init_context(&context, new_key);
 
@@ -138,5 +136,23 @@ int main() {
     {
         AES_encrypt(&context, new_plain_text + (i * 16));
     }
-    print_hex(new_plain_text);
+
+    printf("\n");
+    printf("        Шифр: ");
+    printf(new_plain_text); printf("\n");
+    printf("  Шифр в HEX: ");
+    print_hex(new_plain_text); printf("\n");
+
+    struct AES_context context_decrypt;
+    AES_init_context(&context_decrypt, new_key);
+
+    for (i = 0; i < (int)strlen(new_plain_text)/BLOCKLENGTH; i++)
+    {
+        AES_decrypt(&context_decrypt, new_plain_text + (i * 16));
+    }
+    printf("\n");
+    printf("      Дешифр: ");
+    printf(new_plain_text); printf("\n");
+    printf("Дешифр в HEX: ");
+    print_hex(new_plain_text); printf("\n");
 }
