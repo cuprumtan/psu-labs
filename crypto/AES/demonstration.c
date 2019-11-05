@@ -121,4 +121,18 @@ int main() {
     printf("       Текст: "); printf(new_plain_text); printf("\n");
     printf(" Текст в HEX: "); print_hex(new_plain_text); printf("\n");
     printf("-------------------------------------------------------------------------------------------------------\n");
+
+    printf("ciphertext:\n");
+
+    uint8_t i;
+
+    struct AES_context context;
+    AES_init_context(&context, new_key);
+
+    for (i = 0; i < 4; ++i)
+    {
+        AES_encrypt(&context, new_plain_text + (i * 16));
+        print_hex(new_plain_text + (i * 16));
+    }
+    printf("\n");
 }
