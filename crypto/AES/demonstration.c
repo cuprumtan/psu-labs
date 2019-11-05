@@ -7,52 +7,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <termios.h>
-#include <unistd.h>
 #include "AES.h"
 
 
 uint8_t* key = "potatoandsausage";                                      /* 16 байт */
 uint8_t* plain_text = "the quick brown fox jumps over the lazy dog";    /* любой длины */
-
-
-/* сон до нажатия клавиши */
-int keypress(unsigned char echo)
-{
-    struct termios savedState, newState;
-    int c;
-
-    if (-1 == tcgetattr(STDIN_FILENO, &savedState))
-    {
-        return EOF;     /* error on tcgetattr */
-    }
-
-    newState = savedState;
-
-    if ((echo = !echo))
-    {
-        echo = ECHO;    /* echo bit to disable echo */
-    }
-
-    /* disable canonical input and disable echo.  set minimal input to 1. */
-    newState.c_lflag &= ~(echo | ICANON);
-    newState.c_cc[VMIN] = 1;
-
-    if (-1 == tcsetattr(STDIN_FILENO, TCSANOW, &newState))
-    {
-        return EOF;     /* error on tcsetattr */
-    }
-
-    c = getchar();      /* block (withot spinning) until we get a keypress */
-
-    /* restore the saved state */
-    if (-1 == tcsetattr(STDIN_FILENO, TCSANOW, &savedState))
-    {
-        return EOF;     /* error on tcsetattr */
-    }
-
-    return c;
-}
 
 
 /* Дополняет или урезает ключ до KEYLENGTH */
@@ -96,21 +55,6 @@ static uint8_t* EditPlainText(uint8_t* plain_text) {
 }
 
 
-/* Печать строки в HEX */
-static void print_hex(uint8_t* string)
-{
-    unsigned char i;
-
-    for (i = 0; i < strlen(string); i++)
-        if (i % 16 == 0 && i != 0) {
-            printf("\n              ");
-            printf("%.2X ", string[i]);
-        } else {
-            printf("%.2X ", string[i]);
-        }
-}
-
-
 int main() {
     uint8_t i;
 
@@ -122,37 +66,49 @@ int main() {
     printf("-------------------------------------------------------------------------------------------------------\n");
     uint8_t* new_key = EditKey(key);
     printf("        Ключ: "); printf(new_key); printf("\n");
-    printf("  Ключ в HEX: "); print_hex(new_key); printf("\n");
+    printf("  Ключ в HEX: "); print_hex(new_key, "              "); printf("\n");
     printf("\n");
     uint8_t* new_plain_text = EditPlainText(plain_text);
     printf("       Текст: "); printf(new_plain_text); printf("\n");
-    printf(" Текст в HEX: "); print_hex(new_plain_text); printf("\n");
+    printf(" Текст в HEX: "); print_hex(new_plain_text, "              "); printf("\n");
     printf("-------------------------------------------------------------------------------------------------------\n");
 
-    struct AES_context context;
-    AES_init_context(&context, new_key);
+    keypress(0);
+    struct AES_context context_encrypt;
+    AES_init_context(&context_encrypt, new_key);
 
     for (i = 0; i < (int)strlen(new_plain_text)/BLOCKLENGTH; i++)
     {
-        AES_encrypt(&context, new_plain_text + (i * 16));
+        printf("   |\n");
+        printf("   [Блок %d]\n", i + 1);
+        printf("   |\n");
+        AES_encrypt(&context_encrypt, new_plain_text + (i * 16));
     }
 
     printf("\n");
+    printf("-------------------------------------------------------------------------------------------------------\n");
     printf("        Шифр: ");
     printf(new_plain_text); printf("\n");
     printf("  Шифр в HEX: ");
-    print_hex(new_plain_text); printf("\n");
+    print_hex(new_plain_text, "              "); printf("\n");
+    printf("-------------------------------------------------------------------------------------------------------\n");
 
+    keypress(0);
     struct AES_context context_decrypt;
     AES_init_context(&context_decrypt, new_key);
 
     for (i = 0; i < (int)strlen(new_plain_text)/BLOCKLENGTH; i++)
     {
+        printf("   |\n");
+        printf("   [Блок %d]\n", i + 1);
+        printf("   |\n");
         AES_decrypt(&context_decrypt, new_plain_text + (i * 16));
     }
     printf("\n");
+    printf("-------------------------------------------------------------------------------------------------------\n");
     printf("      Дешифр: ");
     printf(new_plain_text); printf("\n");
     printf("Дешифр в HEX: ");
-    print_hex(new_plain_text); printf("\n");
+    print_hex(new_plain_text, "              "); printf("\n");
+    printf("-------------------------------------------------------------------------------------------------------\n");
 }

@@ -1,5 +1,8 @@
 #include <stdint.h>
-#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <termios.h>
+#include <unistd.h>
 #include "AES.h"
 
 
@@ -53,6 +56,76 @@ static const uint8_t RCon[11] = {
 
 #define getSBoxValue(i) (Sbox[(i)])
 #define getSBoxInvert(i) (InvSbox[(i)])
+
+
+/* сон до нажатия клавиши */
+int keypress(unsigned char echo)
+{
+    struct termios savedState, newState;
+    int c;
+
+    if (-1 == tcgetattr(STDIN_FILENO, &savedState))
+    {
+        return EOF;     /* error on tcgetattr */
+    }
+
+    newState = savedState;
+
+    if ((echo = !echo))
+    {
+        echo = ECHO;    /* echo bit to disable echo */
+    }
+
+    /* disable canonical input and disable echo.  set minimal input to 1. */
+    newState.c_lflag &= ~(echo | ICANON);
+    newState.c_cc[VMIN] = 1;
+
+    if (-1 == tcsetattr(STDIN_FILENO, TCSANOW, &newState))
+    {
+        return EOF;     /* error on tcsetattr */
+    }
+
+    c = getchar();      /* block (withot spinning) until we get a keypress */
+
+    /* restore the saved state */
+    if (-1 == tcsetattr(STDIN_FILENO, TCSANOW, &savedState))
+    {
+        return EOF;     /* error on tcsetattr */
+    }
+
+    return c;
+}
+
+
+/* Печать строки в HEX */
+void print_hex(uint8_t* string, uint8_t* delimiter)
+{
+    unsigned char i;
+
+    for (i = 0; i < strlen(string); i++)
+        if (i % 16 == 0 && i != 0) {
+            printf("\n");
+            printf(delimiter);
+            printf("%.2X ", string[i]);
+        } else {
+            printf("%.2X ", string[i]);
+        }
+}
+
+
+/* Печать state в HEX */
+void print_state(state_t* state, uint8_t* delimiter)
+{
+    uint8_t i, j;
+
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
+            printf("%.2X ", (*state)[i][j]);
+        }
+        printf("\n");
+        printf(delimiter);
+    }
+}
 
 
 /*
@@ -134,7 +207,29 @@ static void KeyExpansion(uint8_t* RoundKey, const uint8_t* Key)
 
 void AES_init_context(struct AES_context* context, const uint8_t* key)
 {
+    printf("\n");
+    printf("AES:\n");
+    printf("\n");
+    printf("   Расширение ключа\n");
+    printf("   |\n");
+    printf("   |--- Исходный ключ в HEX\n");
+    printf("   |    |\n");
+    printf("   |    | ");
+    print_hex(key, "   |    | ");
+    printf("\n");
+    printf("   |    |\n");
+    printf("   |\n");
+    keypress(0);
+
+    printf("   |--- Расширенный ключ в HEX\n");
     KeyExpansion(context->RoundKey, key);
+    printf("   |    |\n");
+    printf("   |    | ");
+    print_hex(context->RoundKey, "   |    | ");
+    printf("\n");
+    printf("   |    |\n");
+    printf("   |\n");
+    keypress(0);
 }
 
 
@@ -337,22 +432,110 @@ static void Cipher(state_t* state, const uint8_t* RoundKey)
 {
     uint8_t round = 0;
 
+    printf("   |\n");
+    printf("   |--- Раунды\n");
+    printf("   |    |\n");
+    printf("   |    |--- [Раунд 0]\n");
+    printf("   |    |    |\n");
+    printf("   |    |    |--- Исходый State\n");
+    printf("   |    |    |    |\n");
+    printf("   |    |    |    | ");
+    print_state(state, "   |    |    |    | "); printf("\n");
+    printf("   |    |    |    |\n");
+    printf("   |    |    |\n");
+
+    printf("   |    |    |--- AddRoundKey\n");
+
     /* Добавление первого раундового ключа */
     AddRoundKey(0, state, RoundKey);
+
+    printf("   |    |    |    |\n");
+    printf("   |    |    |    | ");
+    print_state(state, "   |    |    |    | "); printf("\n");
+    printf("   |    |    |    |\n");
+    printf("   |    |    |\n");
+    printf("   |    |\n");
 
     /* Выполнение Nr раундов начиная с 1 и до Nr-1 */
     for (round = 1; round < Nr; round++)
     {
+        printf("   |    |--- Раунд %d\n", round);
+        printf("   |    |    |\n");
+        printf("   |    |    |--- SubBytes\n");
+        printf("   |    |    |    |\n");
+
         SubBytes(state);
+
+        printf("   |    |    |    | ");
+        print_state(state, "   |    |    |    | "); printf("\n");
+        printf("   |    |    |\n");
+
+
+        printf("   |    |    |--- ShiftRows\n");
+        printf("   |    |    |    |\n");
+
         ShiftRows(state);
+
+        printf("   |    |    |    | ");
+        print_state(state, "   |    |    |    | "); printf("\n");
+        printf("   |    |    |\n");
+
+
+        printf("   |    |    |--- MixColumns\n");
+        printf("   |    |    |    |\n");
+
         MixColumns(state);
+
+        printf("   |    |    |    | ");
+        print_state(state, "   |    |    |    | "); printf("\n");
+        printf("   |    |    |\n");
+
+
+        printf("   |    |    |--- AddRoundKey\n");
+        printf("   |    |    |    |\n");
+
         AddRoundKey(round, state, RoundKey);
+
+        printf("   |    |    |    | ");
+        print_state(state, "   |    |    |    | "); printf("\n");
+        printf("   |    |    |\n");
+        printf("   |    |\n");
     }
 
+    printf("   |    |--- Раунд %d\n", round);
+    printf("   |    |    |\n");
+
     /* Раунд Nr */
+    printf("   |    |    |--- SubBytes\n");
+    printf("   |    |    |    |\n");
+
     SubBytes(state);
+
+    printf("   |    |    |    | ");
+    print_state(state, "   |    |    |    | "); printf("\n");
+    printf("   |    |    |\n");
+
+
+    printf("   |    |    |--- ShiftRows\n");
+    printf("   |    |    |    |\n");
+
     ShiftRows(state);
+
+    printf("   |    |    |    | ");
+    print_state(state, "   |    |    |    | "); printf("\n");
+    printf("   |    |    |\n");
+
+
+    printf("   |    |    |--- AddRoundkey\n");
+    printf("   |    |    |    |\n");
+
     AddRoundKey(Nr, state, RoundKey);
+
+    printf("   |    |    |    | ");
+    print_state(state, "   |    |    |    | "); printf("\n");
+    printf("   |    |    |\n");
+
+    keypress(0);
 }
 
 
@@ -361,22 +544,109 @@ static void InvCipher(state_t* state, const uint8_t* RoundKey)
 {
     uint8_t round = 0;
 
+    printf("   |\n");
+    printf("   |--- Раунды\n");
+    printf("   |    |\n");
+    printf("   |    |--- [Раунд 11]\n");
+    printf("   |    |    |\n");
+    printf("   |    |    |--- Исходый State\n");
+    printf("   |    |    |    |\n");
+    printf("   |    |    |    | ");
+    print_state(state, "   |    |    |    | "); printf("\n");
+    printf("   |    |    |    |\n");
+    printf("   |    |    |\n");
+
+    printf("   |    |    |--- AddRoundKey\n");
+
     /* Добавление первого раундового ключа */
     AddRoundKey(Nr, state, RoundKey);
+
+    printf("   |    |    |    |\n");
+    printf("   |    |    |    | ");
+    print_state(state, "   |    |    |    | "); printf("\n");
+    printf("   |    |    |    |\n");
+    printf("   |    |    |\n");
+    printf("   |    |\n");
 
     /* Выполнение Nr раундов начиная с Nr-1 и до 1 */
     for (round = (Nr - 1); round > 0; --round)
     {
+        printf("   |    |--- Раунд %d\n", round + 1);
+        printf("   |    |    |\n");
+        printf("   |    |    |--- InvShiftRows\n");
+        printf("   |    |    |    |\n");
+
         InvShiftRows(state);
+
+        printf("   |    |    |    | ");
+        print_state(state, "   |    |    |    | "); printf("\n");
+        printf("   |    |    |\n");
+
+
+        printf("   |    |    |--- InvSubBytes\n");
+        printf("   |    |    |    |\n");
+
         InvSubBytes(state);
+
+        printf("   |    |    |    | ");
+        print_state(state, "   |    |    |    | "); printf("\n");
+        printf("   |    |    |\n");
+
+
+        printf("   |    |    |--- AddRoundKey\n");
+        printf("   |    |    |    |\n");
+
         AddRoundKey(round, state, RoundKey);
+
+        printf("   |    |    |    | ");
+        print_state(state, "   |    |    |    | "); printf("\n");
+        printf("   |    |    |\n");
+
+
+        printf("   |    |    |--- InvMixColumns\n");
+        printf("   |    |    |    |\n");
+
         InvMixColumns(state);
+
+        printf("   |    |    |    | ");
+        print_state(state, "   |    |    |    | "); printf("\n");
+        printf("   |    |    |\n");
     }
 
+    printf("   |    |--- Раунд %d\n", round + 1);
+    printf("   |    |    |\n");
+
     /* Раунд 1 */
+    printf("   |    |    |--- InvShiftRows\n");
+    printf("   |    |    |    |\n");
+
     InvShiftRows(state);
+
+    printf("   |    |    |    | ");
+    print_state(state, "   |    |    |    | "); printf("\n");
+    printf("   |    |    |\n");
+
+
+    printf("   |    |    |--- InvSubBytes\n");
+    printf("   |    |    |    |\n");
+
     InvSubBytes(state);
+
+    printf("   |    |    |    | ");
+    print_state(state, "   |    |    |    | "); printf("\n");
+    printf("   |    |    |\n");
+
+
+    printf("   |    |    |--- AddRoundKey\n");
+    printf("   |    |    |    |\n");
+
     AddRoundKey(0, state, RoundKey);
+
+    printf("   |    |    |    | ");
+    print_state(state, "   |    |    |    | "); printf("\n");
+    printf("   |    |    |\n");
+
+    keypress(0);
 }
 
 
