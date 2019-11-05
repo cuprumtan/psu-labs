@@ -55,6 +55,12 @@ static const uint8_t RCon[11] = {
 #define getSBoxInvert(i) (InvSbox[(i)])
 
 
+/* Дополняет или урезает ключ до KEYLENGTH */
+static uint8_t* EditKey(uint8_t* key) {
+    
+}
+
+
 /*
  Функция расширения ключа KeyExpansion
 

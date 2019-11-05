@@ -24,4 +24,7 @@ void AES_init_context(struct AES_context* context, const uint8_t* key);
 void AES_encrypt(const struct AES_context* context, uint8_t* buffer);
 void AES_decrypt(const struct AES_context* context, uint8_t* buffer);
 
+extern uint8_t* key;                                      /* 16 байт */
+extern uint8_t* plain_text;    /* любой длины */
+
 #endif
