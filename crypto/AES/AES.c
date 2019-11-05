@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include <stdio.h>
+#include <stdlib.h>
 #include "AES.h"
 
 
@@ -53,12 +53,6 @@ static const uint8_t RCon[11] = {
 
 #define getSBoxValue(i) (Sbox[(i)])
 #define getSBoxInvert(i) (InvSbox[(i)])
-
-
-/* Дополняет или урезает ключ до KEYLENGTH */
-static uint8_t* EditKey(uint8_t* key) {
-    
-}
 
 
 /*
