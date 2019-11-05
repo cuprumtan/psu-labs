@@ -102,11 +102,18 @@ static void print_hex(uint8_t* string)
     unsigned char i;
 
     for (i = 0; i < strlen(string); i++)
-        printf("%.2X ", string[i]);
+        if (i % 16 == 0 && i != 0) {
+            printf("\n              ");
+            printf("%.2X ", string[i]);
+        } else {
+            printf("%.2X ", string[i]);
+        }
 }
 
 
 int main() {
+    uint8_t i;
+
     printf("Демонстрация работы алгоритма AES128\n");
     printf("\n");
 
@@ -122,17 +129,14 @@ int main() {
     printf(" Текст в HEX: "); print_hex(new_plain_text); printf("\n");
     printf("-------------------------------------------------------------------------------------------------------\n");
 
-    printf("ciphertext:\n");
-
-    uint8_t i;
+    printf("        Шифр: ");
 
     struct AES_context context;
     AES_init_context(&context, new_key);
 
-    for (i = 0; i < 4; ++i)
+    for (i = 0; i < (int)strlen(new_plain_text)/BLOCKLENGTH; i++)
     {
         AES_encrypt(&context, new_plain_text + (i * 16));
-        print_hex(new_plain_text + (i * 16));
     }
-    printf("\n");
+    print_hex(new_plain_text);
 }
