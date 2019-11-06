@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Добавить тему</title>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="container main-header">
+		<b>Добавить тему</b>
+	</div>
+    <form action="add_subject" method="post">
+        <div class="container results">
+            <div class="row">
+                <div class="info-label"><label>Тема вопроса:</label></div>
+                <div class="info-input"><input type="text" name="subject"></div>
+            </div>
+            <div class="btns">
+                <button type="submit" name="btn_action" value="add" class="btn-submit btn-small left-btn">Добавить</button>
+            </div>
+        </div>
+        <div class="container results">
+            <div class="row"><b>Существующие темы:</b></div>
+            {% for key, value in subjects.items() %}
+                <div class="result-card">
+                    {{ key }}. {{ value }}
+                </div>
+            {% endfor %}
+        </div>
+        <div></div>
+    </form>
+</div>
+</body>
+
+</html>

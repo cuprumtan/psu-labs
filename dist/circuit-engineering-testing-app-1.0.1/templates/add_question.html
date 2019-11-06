@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Добавить вопрос</title>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="container main-header">
+        <b>Добавить вопрос</b>
+	</div>
+    <form action="add_question" method="post">
+        <div class="container results">
+            <div class="row">
+                <label>Тема вопроса:</label>
+            </div>
+            {% for key, value in subjects.items() %}
+                <label>
+                    <input id="{{ key }}" type="radio" name="subject" value="{{ key }}">
+                    {{ value }}
+                </label><br>
+            {% endfor %}<br>
+            <div class="row">
+                <div class="info-label"><label>Текст вопроса:</label></div>
+                <div class="info-input"><input type="text" name="text"></div>
+            </div>
+            <div class="row">
+                <label>Варианты ответов (отметьте верные галочками):</label>
+            </div>
+            <div class="row">
+                <div class="info-label"><input value="1" type="checkbox" name="right-flag"></div>
+                <div class="info-input"><input type="text" name="ans1"></div>
+            </div>
+            <div class="row">
+                <div class="info-label"><input value="2" type="checkbox" name="right-flag"></div>
+                <div class="info-input"><input type="text" name="ans2"></div>
+            </div>
+            <div class="row">
+                <div class="info-label"><input value="3" type="checkbox" name="right-flag"></div>
+                <div class="info-input"><input type="text" name="ans3"></div>
+            </div>
+            <div class="row">
+                <div class="info-label"><input value="4" type="checkbox" name="right-flag"></div>
+                <div class="info-input"><input type="text" name="ans4"></div>
+            </div>
+            <div class="btns">
+                <button type="submit" name="btn_action" value="add" class="btn-submit btn-small left-btn">Добавить</button>
+            </div>
+        </div>
+        <div></div>
+    </form>
+</div>
+</body>
+
+</html>
