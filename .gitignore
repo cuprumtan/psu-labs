@@ -1,0 +1,3 @@
+# ignore system directories
+/chat_server/__pycache__
+/chat_server/venv
