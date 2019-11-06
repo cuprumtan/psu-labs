@@ -4,3 +4,16 @@ OS-security/scrapy/chat_server/venv/*
 circuit-engineering/.idea/*
 circuit-engineering/__pycache__/*
 circuit-engineering/venv/*
+crypto/DES/.idea/*
+crypto/DES/CMakeLists.txt
+crypto/DES/cmake-build-debug/*
+crypto/DES-python/.idea/*
+crypto/DES-python/venv/*
+crypto/DES/a.out
+crypto/hash-collision/venv/*
+crypto/hash-collision/.idea/*
+crypto/math-samples/.idea/*
+crypto/math-samples/venv/*
+crypto/AES/.idea/*
+crypto/AES/CMakeLists.txt
+crypto/AES/cmake-build-debug/*
