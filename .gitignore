@@ -1,0 +1,6 @@
+# ignore system directories
+OS-security/scrapy/chat_server/__pycache__/*
+OS-security/scrapy/chat_server/venv/*
+circuit-engineering/.idea/*
+circuit-engineering/__pycache__/*
+circuit-engineering/venv/*
