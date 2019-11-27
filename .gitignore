@@ -17,3 +17,6 @@ crypto/math-samples/venv/*
 crypto/AES/.idea/*
 crypto/AES/CMakeLists.txt
 crypto/AES/cmake-build-debug/*
+crypto/streebog/.idea/*
+crypto/streebog/CMakeLists.txt
+crypto/streebog/cmake-build-debug/*

@@ -658,3 +658,4 @@ void AES_decrypt(const struct AES_context* context, uint8_t* buffer)
 {
     InvCipher((state_t*)buffer, context->RoundKey);
 }
+
