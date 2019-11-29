@@ -15,7 +15,7 @@ void S(uint8_t *state)
 }
 
 
-// функция подстановки из tau
+/* функция подстановки из tau */
 void P(uint8_t *state)
 {
     uint8_t i, t[64] = {};
@@ -54,7 +54,7 @@ void L(uint8_t *state)
 }
 
 
-// функция XOR с элементом массива C
+/* функция XOR с элементом массива C */
 void XORC(const void *a, const void *b, void *c)
 {
     uint8_t i;
@@ -68,8 +68,8 @@ void XORC(const void *a, const void *b, void *c)
 }
 
 
-// функция KeySchedule(K, i)
-// формирует временный ключ на каждом раунде функции E(K, m)
+/* функция KeySchedule(K, i)
+   формирует временный ключ на каждом раунде функции E(K, m) */
 void KeySchedule(uint8_t *K, uint8_t i)
 {
     XORC(K, C[i], K);
@@ -79,7 +79,7 @@ void KeySchedule(uint8_t *K, uint8_t i)
 }
 
 
-// функция E(K, m)
+/* функция E(K, m) */
 void E(uint8_t *K, const uint8_t *m, uint8_t *state)
 {
     uint8_t i;
@@ -99,7 +99,7 @@ void E(uint8_t *K, const uint8_t *m, uint8_t *state)
 }
 
 
-// функция сжатия gN(N, m, h)
+/* функция сжатия gN(N, m, h) */
 void gN(const uint8_t *N, const uint8_t *m, uint8_t *h)
 {
     uint8_t t[64], K[64];
@@ -114,7 +114,7 @@ void gN(const uint8_t *N, const uint8_t *m, uint8_t *h)
 }
 
 
-// функция для вычисления mod 2^512
+/* функция для вычисления mod 2^512 */
 void MOD2512(const uint8_t *a, const uint8_t *b, uint8_t *c)
 {
     int i, t;
@@ -128,7 +128,7 @@ void MOD2512(const uint8_t *a, const uint8_t *b, uint8_t *c)
 
 
 
-// функция хеширования
+/* функция хеширования */
 void hash_func(uint8_t *IV, const uint8_t *message, uint64_t length, uint8_t *out)
 {
     uint8_t v512[64] = {0x00}; v512[62] = 0x02;

@@ -152,6 +152,14 @@ uint8_t C[12][64] = {
 void S(uint8_t *state);
 void P(uint8_t *state);
 void L(uint8_t *state);
+void XORC(const void *a, const void *b, void *c);
+void KeySchedule(uint8_t *K, uint8_t i);
+void E(uint8_t *K, const uint8_t *m, uint8_t *state);
+void gN(const uint8_t *N, const uint8_t *m, uint8_t *h);
+void MOD2512(const uint8_t *a, const uint8_t *b, uint8_t *c);
+void hash_func(uint8_t *IV, const uint8_t *message, uint64_t length, uint8_t *out);
+void hash_512(const uint8_t *message, uint64_t length, uint8_t *out);
+void hash_256(const uint8_t *message, uint64_t length, uint8_t *out);
 
 
 #endif //STREEBOG_STREEBOG_H
