@@ -150,7 +150,7 @@ uint8_t C[12][64] = {
 
 
 void S(uint8_t *state);
-void P(unsigned char *state);
+void P(uint8_t *state);
 void L(uint8_t *state);
 
 
