@@ -164,3 +164,18 @@ void hash_func(uint8_t *IV, const uint8_t *message, uint64_t length, uint8_t *ou
     memcpy(out, hash, 64);
 
 }
+
+
+void hash_512(const uint8_t *message, uint64_t length, uint8_t *out)
+{
+    uint8_t IV[64] = {0x00};
+    hash_func(IV, message, length, out);
+}
+
+void hash_256(const uint8_t *message, uint64_t length, uint8_t *out)
+{
+    uint8_t IV[64] = {0x01};
+    uint8_t hash[64];
+    hash_func(IV, message, length, hash);
+    memcpy(out, hash, 32);
+}
