@@ -117,7 +117,7 @@ void gN(const uint8_t *N, const uint8_t *m, uint8_t *h)
 /* функция для вычисления mod 2^512 */
 void MOD2512(const uint8_t *a, const uint8_t *b, uint8_t *c)
 {
-    int i, t;
+    int i, t = 0;
 
     for(i = 63; i >= 0; i--)
     {
