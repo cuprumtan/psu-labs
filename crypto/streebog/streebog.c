@@ -99,3 +99,16 @@ void E(uint8_t *K, const uint8_t *m, uint8_t *state)
 }
 
 
+// функция сжатия gN(N, m, h)
+void gN(const uint8_t *N, const uint8_t *m, uint8_t *h)
+{
+    uint8_t t[64], K[64];
+
+    XORC(N, h, K);
+    S(K);
+    P(K);
+    L(K);
+    E(K, m, t);
+    XORC(t, h, t);
+    XORC(t, m, h);
+}
