@@ -140,12 +140,27 @@ void hash_func(uint8_t *IV, const uint8_t *message, uint64_t length, uint8_t *ou
 
     while (len >= 512)
     {
-        memcpy(m, message + len/8 - 63 - ((len & 0x7) == 0 ), 64);
+        memcpy(m, message + len/8 - 63 - ((len & 0x7) == 0), 64);
 
-        gN(N, hash, m);
+        gN(N, m, hash);
         MOD2512(N, v512, N);
         MOD2512(Sigma, m, Sigma);
         len -= 512;
     }
+
+    memset(m, 0, 64);
+    memcpy(m + 63 - len/8 + ((len & 0x7) == 0), message, len/8 + 1 - ((len & 0x7) == 0));
+
+    m[63 - len/8] |= (1 << (len & 0x7));
+
+    gN(N, m, hash);
+    v512[63] = len & 0xFF;
+    v512[62] = len >> 8;
+    MOD2512(N, v512, N);
+    MOD2512(Sigma, m, Sigma);
+    gN(v0, N, hash);
+    gN(v0, Sigma, hash);
+
+    memcpy(out, hash, 64);
 
 }
