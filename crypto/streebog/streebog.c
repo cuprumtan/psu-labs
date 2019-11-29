@@ -114,6 +114,20 @@ void gN(const uint8_t *N, const uint8_t *m, uint8_t *h)
 }
 
 
+// функция для вычисления mod 2^512
+void MOD2512(const uint8_t *a, const uint8_t *b, uint8_t *c)
+{
+    int i, t;
+
+    for(i = 63; i >= 0; i--)
+    {
+        t = a[i] + b[i] + (t >> 8);
+        c[i] = t & 0xFF;
+    }
+}
+
+
+
 // функция хеширования
 void hash_func(uint8_t *IV, const uint8_t *message, uint64_t length, uint8_t *out)
 {
@@ -123,5 +137,15 @@ void hash_func(uint8_t *IV, const uint8_t *message, uint64_t length, uint8_t *ou
     uint8_t N[64] = {0x00};
     uint8_t m[64], *hash = IV;
     uint64_t len = length;
+
+    while (len >= 512)
+    {
+        memcpy(m, message + len/8 - 63 - ((len & 0x7) == 0 ), 64);
+
+        gN(N, hash, m);
+        MOD2512(N, v512, N);
+        MOD2512(Sigma, m, Sigma);
+        len -= 512;
+    }
 
 }
