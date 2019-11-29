@@ -112,3 +112,16 @@ void gN(const uint8_t *N, const uint8_t *m, uint8_t *h)
     XORC(t, h, t);
     XORC(t, m, h);
 }
+
+
+// функция хеширования
+void hash_func(uint8_t *IV, const uint8_t *message, uint64_t length, uint8_t *out)
+{
+    uint8_t v512[64] = {0x00}; v512[62] = 0x02;
+    uint8_t v0[64] = {0x00};
+    uint8_t Sigma[64] = {0x00};
+    uint8_t N[64] = {0x00};
+    uint8_t m[64], *hash = IV;
+    uint64_t len = length;
+
+}
