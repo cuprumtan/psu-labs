@@ -3,7 +3,8 @@
 #include "streebog.h"
 
 
-/* функция подстановки из pi */
+/* функция подстановки из pi
+   каждому значению state сопоставляется значение из pi */
 void S(uint8_t *state)
 {
     uint8_t i;
@@ -15,7 +16,8 @@ void S(uint8_t *state)
 }
 
 
-/* функция подстановки из tau */
+/* функция подстановки из tau
+   каждому значению state сопоставляется значение из tau */
 void P(uint8_t *state)
 {
     uint8_t i, t[64] = {};
@@ -29,7 +31,8 @@ void P(uint8_t *state)
 }
 
 
-/* функция умножения вектора state на бинарную матрицу A */
+/* функция умножения вектора state на матрицу A 64x64 в GF(2)
+   если state_i = 0, то результат элемента 0 */
 void L(uint8_t *state)
 {
     uint64_t v = 0;
@@ -37,15 +40,19 @@ void L(uint8_t *state)
 
     for (i = 0; i < 8; i++)
     {
+        /* обработка 64-битного элемента state */
         v = 0;
         for(k = 0; k < 8; k++)
         {
             for(j = 0; j < 8; j++)
             {
-                if ((state[i * 8 + k] & (1<<(7 - j))) != 0)
+                /* выполняем побитовое умножение, чтобы вычислить ненулевой бит в state
+                   0 все равно  в итоге вернет 0 элемент */
+                if ((state[i * 8 + k] & (1 << (7 - j))) != 0)  // сдвиг с 10000000 до 00000001
                     v ^= A[k * 8 + j];
             }
         }
+
         for(k = 0; k < 8; k++)
         {
             state[i * 8 + k] = (v & ((uint64_t)0xFF << (7 - k) * 8)) >> (7 - k) * 8;
@@ -84,8 +91,7 @@ void E(uint8_t *K, const uint8_t *m, uint8_t *state)
 {
     uint8_t i;
 
-    memcpy(K, K, 64);
-
+    // memcpy(K, K, 64);
     XORC(m, K, state);
 
     for(i = 0; i < 12; i++)
@@ -114,7 +120,7 @@ void gN(const uint8_t *N, const uint8_t *m, uint8_t *h)
 }
 
 
-/* функция для вычисления mod 2^512 */
+/* функция для вычисления сложения в кольце 2^512 */
 void MOD2512(const uint8_t *a, const uint8_t *b, uint8_t *c)
 {
     int i, t = 0;
@@ -174,8 +180,82 @@ void hash_512(const uint8_t *message, uint64_t length, uint8_t *out)
 
 void hash_256(const uint8_t *message, uint64_t length, uint8_t *out)
 {
-    uint8_t IV[64] = {0x01};
+    uint8_t IV[64] =
+            {
+                    0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,
+                    0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,
+                    0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,
+                    0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01
+            };
     uint8_t hash[64];
     hash_func(IV, message, length, hash);
     memcpy(out, hash, 32);
+}
+
+
+/* тестирование */
+void test()
+{
+    uint8_t streebog512[64]={}, streebog256[32] = {};
+    uint32_t i, j;
+
+    for(i = 0; i < TEST_VECTORS; i++)
+    {
+        hash_512(Message[i], MessageLength[i], streebog512);
+
+        if(memcmp(streebog512, Hash_512[i], sizeof(uint8_t) * 64))
+        {
+            printf("       Test: Fail\n");
+            printf("    Version: 512\n");
+            printf("    Message: %d\n", i);
+            return;
+        }
+        else
+        {
+            printf("   Version: 512\n");
+            printf("   Message: ");
+            for (j = 0; j < sizeof(Message); j++)
+            {
+                printf("%X ", Message[i][j]);
+            }
+            printf("\n      Hash: ");
+            for (j = 0; j < sizeof(streebog512); j++)
+            {
+                printf("%X ", streebog512[j]);
+            }
+            printf("\n\n");
+        }
+
+        hash_256(Message[i], MessageLength[i], streebog256);
+
+        if(memcmp(streebog256, Hash_256[i], sizeof(uint8_t) * 32))
+        {
+            printf("       Test: Fail\n");
+            printf("    Version: 256\n");
+            printf("    Message: %d\n", i);
+            return;
+        }
+        else
+        {
+            printf("   Version: 256\n");
+            printf("   Message: ");
+            for (j = 0; j < sizeof(Message); j++)
+            {
+                printf("%X ", Message[i][j]);
+            }
+            printf("\n      Hash: ");
+            for (j = 0; j < sizeof(streebog256); j++)
+            {
+                printf("%X ", streebog256[j]);
+            }
+            printf("\n\n");
+        }
+    }
+}
+
+
+int main()
+{
+    test();
+    return 0;
 }
