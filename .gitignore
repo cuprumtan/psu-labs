@@ -20,3 +20,7 @@ crypto/AES/cmake-build-debug/*
 crypto/streebog/.idea/*
 crypto/streebog/CMakeLists.txt
 crypto/streebog/cmake-build-debug/*
+crypto/streebog/streebog
+crypto/substitution-cipher/.idea/*
+crypto/substitution-cipher/__pycache__/*
+crypto/substitution-cipher/venv/*
