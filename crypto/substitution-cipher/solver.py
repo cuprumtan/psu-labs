@@ -52,7 +52,7 @@ while iterations < int(max_iterations):
 
     if parent_chi > max_chi:
         max_chi, max_key = parent_chi, parent_key[:]
-        print('\nЛучший результат:', max_chi, ', итерация', iterations)
+        print('\nЛучший результат:', max_chi, ', итерация', iterations*1000)
         ss = SimpleSub(max_key)
         print('     гипотетический ключ: ' + ''.join(max_key))
         print('    гипотетический текст: ' + ss.decipher(cipher_text))
