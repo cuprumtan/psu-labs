@@ -24,3 +24,6 @@ crypto/streebog/streebog
 crypto/substitution-cipher/.idea/*
 crypto/substitution-cipher/__pycache__/*
 crypto/substitution-cipher/venv/*
+crypto/kuznyechik-register-hack/.idea/*
+crypto/kuznyechik-register-hack/venv/*
+
