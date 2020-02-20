@@ -47,3 +47,14 @@ def hack_key(rounds):
                     result[i] = lp(bytearray(strxor(kuznyechik.ks[0], temp_text)))[i] ^ PIinv[0]
     return result
 
+
+K0 = hack_key(0)
+K1 = hack_key(1)
+new_master_key = K0 + K1
+
+print('Оригинальнй мастер-ключ: ', master_key)
+print(' Полученный мастер-ключ: ', new_master_key)
+if master_key == new_master_key:
+    print('    ---> hacked')
+else:
+    print('    ---> failed')
