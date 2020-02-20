@@ -1,0 +1,1 @@
+from pygost.gost3412 import GOST3412Kuznechik
