@@ -44,7 +44,7 @@ def hack_key(rounds):
                 if rounds == 0:
                     result[i] = plain_text[i] ^ PIinv[0]
                 if rounds == 1:
-                    result[i] = lp(bytearray(strxor(kuznyechik.ks[0], temp_text)))[i] ^ PIinv[0]
+                    result[i] = lp(bytearray(strxor(kuznyechik.ks[0], plain_text)))[i] ^ PIinv[0]
     return result
 
 
