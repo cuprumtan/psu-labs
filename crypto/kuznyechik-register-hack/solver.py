@@ -12,7 +12,7 @@
 
 
 from pygost.gost3412 import GOST3412Kuznechik
-from pygost.gost3412 import lp, strxor, PIinv, Linv
+from pygost.gost3412 import lp, strxor, L, PI, PIinv
 
 
 master_key = [x for x in range(32)]
@@ -32,9 +32,9 @@ def hack_key(rounds):
             for round in range(rounds):
                 temp_text = lp(bytearray(strxor(kuznyechik.ks[round], temp_text)))
             # атака
-            temp_text = bytearray(strxor(kuznyechik.ks[rounds], temp_text))
+            temp_text = [PI[x] for x in bytearray(strxor(kuznyechik.ks[rounds], temp_text))]
             temp_text[i] = 0
-            temp_text = lp(temp_text)
+            temp_text = L(temp_text)
             # завершаем цикл шифрования
             for round in range(rounds + 1, 9):
                 temp_text = lp(bytearray(strxor(kuznyechik.ks[round], temp_text)))
