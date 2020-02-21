@@ -13,10 +13,11 @@
 
 from pygost.gost3412 import GOST3412Kuznechik
 from pygost.gost3412 import lp, strxor, L, PI, PIinv
+from random import randint
 
 
-master_key = [x for x in range(32)]
-plain_text = [0 for x in range(16)]
+master_key = [randint(0, 256) for x in range(32)]
+plain_text = [randint(0, 10) for x in range(16)]
 kuznyechik = GOST3412Kuznechik(master_key)
 
 
