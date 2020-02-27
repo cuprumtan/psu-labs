@@ -25,6 +25,7 @@ kuznyechik = GOST3412Kuznechik(master_key)
 def hack_key(rounds):
     result = [0 for x in range(16)]
     for i in range(16):
+        byte_attempts = 0
         # для каждого байта существует 2^8 = 256 возможных значений
         for j in range(256):
             plain_text[i] = j
@@ -44,8 +45,13 @@ def hack_key(rounds):
             if temp_text == GOST3412Kuznechik.encrypt(kuznyechik, plain_text):
                 if rounds == 0:
                     result[i] = plain_text[i] ^ PIinv[0]
+                    break
                 if rounds == 1:
                     result[i] = lp(bytearray(strxor(kuznyechik.ks[0], plain_text)))[i] ^ PIinv[0]
+                    break
+            else:
+                byte_attempts += 1
+    print('       Ключ K{0}, попыток: {1}'.format(rounds, byte_attempts))
     return result
 
 
