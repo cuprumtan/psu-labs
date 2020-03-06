@@ -26,4 +26,5 @@ crypto/substitution-cipher/__pycache__/*
 crypto/substitution-cipher/venv/*
 crypto/kuznyechik-register-hack/.idea/*
 crypto/kuznyechik-register-hack/venv/*
-
+crypto/RC4/.idea/*
+crypto/RC4/venv/*
