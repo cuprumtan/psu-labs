@@ -81,6 +81,43 @@ class GOST3410Curve(object):
         return self._st
 
 
+# функция для генерации публичного ключа
+def public_key(curve, prv):
+    return curve.exp(prv)
+
+
+# функция для вычисления подписи
+def sign(curve, message, private_key, k=0):
+    e = message % curve.q
+    if e == 0:
+        e = 1
+    if k == 0:
+        k = random.randint(1, curve.q - 1)
+    r, s = 0, 0
+    while r == 0 or s == 0:
+        c_point = k * curve
+        r = c_point.x % curve.q
+        s = (r * private_key + k * e) % curve.q
+    return r, s
+
+
+# функция подтверждения
+def verify(curve, message, sign, public_key):
+    r1, s1 = sign
+    if r1 <= 0 or r1 >= curve.q or s1 <= 0 or s1 >= curve.q:
+        return False
+    e = message % curve.q
+    if e == 0:
+        e = 1
+    nu = inverse_mod(e, curve.q)
+    z1 = (sign[1] * nu) % curve.q
+    z2 = (-sign[0] * nu) % curve.q
+    c_point = z1 * curve + z2 * public_key
+    r = c_point.x % curve.q
+    if r == sign[0]:
+        return True
+    return False
+
 
 
 
