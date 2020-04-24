@@ -21,16 +21,18 @@ for i in plain_message:
     byte_message.append(ord(i))
 # message = int.from_bytes(streebog.get_hash(plain_message), byteorder='big')
 message = int.from_bytes(streebog.get_hash(byte_message), byteorder='big')
-print('>> Исходное сообщение: ', message, end='\n\n')
+print('>> Исходное сообщение: ', hex(message), end='\n\n')
 
 # генерация ключей
 d, q_point = curve.generate_keys()
-print('>> Закрытый ключ: ', d, end='\n\n')
+print('>> Закрытый ключ: ', hex(d), end='\n\n')
 
 # использование подписи
 my_sign = sign(curve, message, d)
-print('>> Подпись: ', my_sign, end='\n\n')
+print('>> Подпись: ', end='\n')
+for x in my_sign:
+    print(hex(x))
 
-my_verify_0 = verify(curve, message, my_sign, q_point)
-print('>> Проверка публичного ключа: ', my_verify_0, end='\n\n')
+my_verify = verify(curve, message, my_sign, q_point)
+print('\n>> Проверка публичного ключа: ', my_verify, end='\n\n')
 
