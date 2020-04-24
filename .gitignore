@@ -29,4 +29,6 @@ crypto/kuznyechik-register-hack/venv/*
 crypto/RC4/.idea/*
 crypto/RC4/venv/*
 crypto/DES-timing-attack/venv/*
-rypto/DES-timing-attack/.idea/*
+crypto/DES-timing-attack/.idea/*
+crypto/gost34.10-18/.idea/*
+crypto/gost34.10-18/venv/*
