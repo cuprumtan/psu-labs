@@ -26,3 +26,5 @@ keys = RC4(key)
 
 for symbol in plain_text:
     print('{:02x} '.format(ord(symbol) ^ keys.__next__()), end='')
+
+
