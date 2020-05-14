@@ -32,3 +32,7 @@ crypto/DES-timing-attack/venv/*
 crypto/DES-timing-attack/.idea/*
 crypto/gost34.10-18/.idea/*
 crypto/gost34.10-18/venv/*
+crypto/RSA- Needham-Schroeder-system/.idea/*
+crypto/RSA- Needham-Schroeder-system/__pycache__/*
+crypto/RSA- Needham-Schroeder-system/venv/*
+crypto/gost34.10-18/__pycache__/*
