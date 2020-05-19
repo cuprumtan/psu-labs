@@ -38,7 +38,7 @@ class RSAEncryption:
         else:
             return a
 
-    # проверка на взоимнопростые числа
+    # проверка на взаимнопростые числа
     def is_coprime(self, list):
         for number, phi in combinations(list, 2):
             if self.euclid(number, phi) == 1:
